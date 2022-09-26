@@ -23,8 +23,8 @@ from pygame.locals import (
 # GLOBAL VARIABLES
 COLOR = (255, 100, 98)
 SURFACE_COLOR = (167, 255, 100)
-WIDTH = 500
-HEIGHT = 500
+WIDTH = 800
+HEIGHT = 600
 
 RED = (255, 0, 0)
 
