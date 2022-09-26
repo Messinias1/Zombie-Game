@@ -7,9 +7,9 @@ import camera
 class Room:
     def __init__(self):
         self.camera = camera.Camera(0, 0)  # set the camera x and y to 0
-        self.tile_objects = []
-        self.tile_group = pygame.sprite.Group()
-        self.DIMENSIONS = [0, 0]
+        self.room_sprites = []
+        self.room_sprite_group = pygame.sprite.Group()
+        self.DIMENSIONS = [0, 0]  # keep track of dimensions of all walls in the room?
 
     def generate(self, layout_file):
         with open(layout_file, "r") as f:
@@ -20,13 +20,12 @@ class Room:
             for char in row:
                 if char == "W":
                     this_tile = wall.Wall(x, y, "sprites/walls/reg.gif")
-                    self.tile_objects.append(this_tile)
-                    self.tile_group.add(this_tile)
+                    self.room_sprites.append(this_tile)
+                    self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
-        self.DIMENSIONS = [len(self.tile_objects) * 32, len(self.tile_objects) * 32]
 
-    def update_all_tiles(self):
-        for tile in self.tile_objects:
-            tile.update(camera_ref=self.camera)
+    def update_room_sprites(self):
+        for sprite in self.room_sprites:
+            sprite.update(camera_ref=self.camera)
 
