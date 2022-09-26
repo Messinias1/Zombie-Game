@@ -28,6 +28,5 @@ class Room:
 
     def update_all_tiles(self):
         for tile in self.tile_objects:
-            tile.rect.x = tile.xpos + self.camera.x_scroll
-            tile.rect.y = tile.ypos + self.camera.y_scroll
+            tile.update(camera_ref=self.camera)
 
