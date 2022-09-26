@@ -10,20 +10,23 @@ class Entity(pygame.sprite.Sprite):
         self.rect.x, self.rect.y = self.xpos, self.ypos
         self.direction = 1
 
-    def move(self):
+    def move(self, speed):
         if self.direction == 1:
-            self.change_pos(1, 0)
+            self.change_x(speed)
         elif self.direction == -1:
-            self.change_pos(-1, 0)
+            self.change_x(-speed)
         elif self.direction == 2:
-            self.change_pos(0, 1)
+            self.change_y(speed)
         elif self.direction == -2:
-            self.change_pos(0, -1)
+            self.change_y(-speed)
 
-    def change_pos(self, add_x, add_y):
+    def change_x(self, add_x):
         self.xpos += add_x
+
+    def change_y(self, add_y):
         self.ypos += add_y
 
     def check_for_collisions(self, walls):
         for wall in walls:
+            #  idk how
             pass
