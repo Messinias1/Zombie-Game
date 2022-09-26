@@ -37,7 +37,7 @@ class Main:
         self.game_map = room.Room()
         self.player = entity.Entity(250, 250, "sprites/player/p.gif")
         self.game_map.generate("rooms/layout.json")
-        self.game_map.tile_group.add(self.player)
+        self.game_map.room_sprite_group.add(self.player)
         self.exit = False
         self.clock = pygame.time.Clock()
         self.curmove, self.SPEED = [0, 0], 2
@@ -66,9 +66,9 @@ class Main:
         while not exit:
             for event in pygame.event.get():
                 exit = self.handle_event(event)
-            self.game_map.update_all_tiles()
+            self.game_map.update_room_sprites()
             self.screen.fill(SURFACE_COLOR)
-            self.game_map.tile_group.draw(self.screen)
+            self.game_map.room_sprite_group.draw(self.screen)
             pygame.display.flip()
             self.clock.tick(60)
             self.game_map.camera.x_scroll += self.curmove[0]
