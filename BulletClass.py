@@ -1,7 +1,7 @@
 import pygame
 import math
 
-class PlayerBullet:
+class Bullet:
     def __init__(self, x:int, y:int , mouse_x, mouse_y) -> None:
         self.x = x
         self.y = y
