@@ -1,4 +1,5 @@
 import pygame
+import entity
 
 
 class Camera:
@@ -10,4 +11,9 @@ class Camera:
 
     def y_pan(self, add_y):
         self.y_scroll += add_y
+
+    def follow_entity(self, focus: entity.Entity):
+        pass
+
+
 
