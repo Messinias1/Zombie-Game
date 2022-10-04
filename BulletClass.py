@@ -7,8 +7,8 @@ class PlayerBullet:
         self.y = y
         self.mouse_x = mouse_x
         self.mouse_y = mouse_y
-        self.speed = 15
         self.angle = math.atan2(y - mouse_y, x - mouse_x)
+        self.speed = 15
         self.x_velocity = math.cos(self.angle) * self.speed
         self.y_velocity = math.sin(self.angle) * self.speed
 
