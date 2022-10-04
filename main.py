@@ -35,7 +35,7 @@ class Main:
         self.size = (WIDTH, HEIGHT)
         self.screen = pygame.display.set_mode(self.size)
         self.game_map = world.World()
-        self.player = entity.Entity(250, 250, "sprites/player/p.gif", self.game_map)
+        self.player = entity.Entity(-100, 0, "sprites/player/p.gif", self.game_map)
         self.game_map.generate("rooms/layout.json")
         self.game_map.room_sprite_group.add(self.player)
         self.exit = False
