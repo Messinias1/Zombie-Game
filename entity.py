@@ -31,9 +31,9 @@ class Entity(pygame.sprite.Sprite):
         walls = self.room.room_sprites
         move_x, move_y = try_x, try_y
         for wall in walls:
-            if wall.collidepoint == self.collidepoint:
-                move_y = -try_y
-            if wall.collidepoint == try_y + self.ypos:
-                move_x = -try_x
+            if wall.rect.collidepoint(self.rect.x + (wall.width/2), self.rect.y + try_y + (wall.height/2)):  # collisioin going in y direction
+                move_y = 0
+            if wall.rect.collidepoint(self.rect.x + try_x + (wall.width/2), self.rect.y + (wall.height/2)):  # collision going in x direction
+                move_x = 0
 
         return move_x, move_y
