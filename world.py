@@ -4,7 +4,7 @@ import wall
 import camera
 
 
-class Room:
+class World:
     def __init__(self):
         self.camera = camera.Camera(0, 0)  # set the camera x and y to 0
         self.room_sprites = []
