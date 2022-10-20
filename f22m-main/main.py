@@ -11,7 +11,7 @@ pygame.display.set_caption("Zombie Game")
 # create the world
 world_room = World("assets/rooms/layout1.json")
 # create player
-player = Character(100, 100, "assets/images/characters/elf", world_room)
+player = Character(40, 28, "assets/images/characters/elf", world_room)
 world_room.room_sprite_group.add(player)
 # main game loop
 run = True
