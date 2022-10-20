@@ -2,6 +2,9 @@
 # Created by https://www.toptal.com/developers/gitignore/api/macos,windows,linux,jetbrains,eclipse,visualstudiocode,java,c++,python
 # Edit at https://www.toptal.com/developers/gitignore?templates=macos,windows,linux,jetbrains,eclipse,visualstudiocode,java,c++,python
 
+*.xml
+*.iml
+
 ### C++ ###
 # Prerequisites
 *.d
