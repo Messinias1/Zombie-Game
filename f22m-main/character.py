@@ -2,7 +2,6 @@ import pygame
 import constants
 import os
 
-
 class Character(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
         """x, y --> the character's starting position
