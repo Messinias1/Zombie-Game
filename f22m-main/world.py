@@ -17,7 +17,7 @@ class World:
             x = 0
             for char in row:
                 if char == "W":
-                    this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif")
+                    this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif", self)
                     self.room_sprites.append(this_tile)
                     self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
