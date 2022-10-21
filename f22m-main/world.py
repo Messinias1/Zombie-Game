@@ -24,5 +24,5 @@ class World:
             y += 32
 
     def update_room_sprites(self):
-        for sprite in self.room_sprites:
-            sprite.update(camera_ref=self.camera)
+        for sprite in self.room_sprite_group:
+            sprite.update()
