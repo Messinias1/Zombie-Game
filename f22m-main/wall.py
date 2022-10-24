@@ -10,7 +10,7 @@ class Wall(pygame.sprite.Sprite):
         self.rect = self.image.get_rect()
         self.world = in_room
 
-    def update(self, camera_ref=None):
+    def update(self, camera_ref=None) -> None:
         # take into account camera scroll when setting position
         if camera_ref is None:
             camera_ref = self.world.camera
