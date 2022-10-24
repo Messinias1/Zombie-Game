@@ -31,6 +31,7 @@ def handle_input(player):
 
 # Initialize Pygame and create display screen
 pygame.init()
+clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Game")
@@ -43,9 +44,10 @@ player = Character(400, 300, "assets/images/characters/elf", world_room)
 # Create Items:
 coin = Item(400, 300, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
 
+
+
 # Add sprites to world sprite group here so that they can be drawn:
 world_room.room_sprite_group.add(player)
-world_room.room_sprite_group.add(coin)
 world_room.room_sprite_group.add(coin)
 
 
@@ -54,6 +56,7 @@ run = True
 
 while run:
     # Background Color
+    clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
 
     # event handler

@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import constants
 import os
@@ -23,9 +25,15 @@ class Character(pygame.sprite.Sprite):
         pygame.draw.rect(surface, constants.RED, self.rect)
 
     def move(self, x, y):
+        # control diagonal movement
+        if x != 0 and y != 0:
+            x = x * (math.sqrt(2) / 2)
+            y = y * (math.sqrt(2) / 2)
+
         movex, movey = self.check_for_collisions(x, y)
-        self.change_y(movey)
+
         self.change_x(movex)
+        self.change_y(movey)
 
     def change_x(self, add_x):
         self.xpos += add_x
