@@ -33,7 +33,11 @@ class Character(pygame.sprite.Sprite):
     def change_y(self, add_y):
         self.ypos += add_y
 
-    def check_for_collisions(self, try_x, try_y):
+    def check_for_collisions(self, try_x=None, try_y=None):
+        if try_x is None:
+            try_x = 0
+        if try_y is None:
+            try_y = 0
         walls = self.world.room_sprites
         move_x, move_y = try_x, try_y
         for wall in walls:
