@@ -36,7 +36,8 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = World("assets/rooms/layout1.json")
+world_room = World()
+world_room.generate("assets/rooms/layout1.json")
 # create player
 player = Character(400, 300, "assets/images/characters/elf", world_room)
 
