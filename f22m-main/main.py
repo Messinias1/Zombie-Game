@@ -46,6 +46,8 @@ coin = Item(400, 300, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_r
 # Add sprites to world sprite group here so that they can be drawn:
 world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(coin)
+world_room.room_sprite_group.add(coin)
+
 
 # main game loop
 run = True
