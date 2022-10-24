@@ -1,17 +1,18 @@
 import string, sys
 import pygame as pg
 
+# helper website https://www.thepythoncode.com/article/make-a-button-using-pygame-in-python
+
 pg.init()
 fps = 60
 fpsClock = pg.time.Clock()
 width, height = 800, 600
 screen = pg.display.set_mode((width, height))
-
-font = pg.font.SysFont('Arial', 30)
-
 objects = []
 
 class Button:
+    font = pg.font.SysFont('Arial', 30)
+    
     width:int
     height:int
     position_x:int
@@ -27,7 +28,7 @@ class Button:
 
         Parameters
         ----------
-        some_font_color, font_size, some_width, some_height, some_position_x, some_position_y, some_text
+        some_width, some_height, some_position_x, some_position_y, some_text, some_on_click_function, some_already_pressed
         """
         self.width = some_width
         self.height = some_height
@@ -39,24 +40,16 @@ class Button:
 
         self.fillColors = {
             'normal': (255, 255, 255),
-            'hover': (200, 200, 200),
+            'hover': (150, 150, 150),
             'pressed': (100, 100, 100)
         }
 
         self.buttonSurface = pg.Surface((self.width, self.height))
         self.buttonRect = pg.Rect(self.position_x, self.position_y, self.width, self.height)
 
-        self.buttonSurf = font.render(self.text, True, (20, 20, 20))
+        self.buttonSurf = self.font.render(self.text, True, (20, 20, 20))
 
         objects.append(self)
-
-    def createButton(self, screen) -> None:
-        """Creates the button on the screen.
-
-        Parameters
-        ----------
-        screen - describes the size of the screen
-        """
 
     def process(self):
         mousePos = pg.mouse.get_pos()
@@ -95,9 +88,5 @@ while True:
         object.process()
     pg.display.flip()
     fpsClock.tick(fps)
-
-# start_button = Button(some_background_color = (79, 121, 66), some_font = 'impact', some_font_color = (0, 0, 0), some_font_size = 30, some_width = 60, some_height = 30, some_position_x = 300, some_position_y = 300, some_text = 'Quit')
-# start_button.createButton(screen)
-
 
     
