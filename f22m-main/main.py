@@ -1,5 +1,6 @@
 import pygame
 import constants
+import math
 
 from item import Item
 from character import Character
@@ -19,14 +20,18 @@ def handle_input(player):
         exit()
 
     # WASD --> player movement
+    dx = 0
+    dy = 0
     if keys[pygame.K_a]:
-        player.move(-constants.PLAYER_SPEED, 0)
+        dx = -constants.PLAYER_SPEED
     if keys[pygame.K_d]:
-        player.move(constants.PLAYER_SPEED, 0)
+        dx = constants.PLAYER_SPEED
     if keys[pygame.K_w]:
-        player.move(0, -constants.PLAYER_SPEED)
+        dy = -constants.PLAYER_SPEED
     if keys[pygame.K_s]:
-        player.move(0, constants.PLAYER_SPEED)
+        dy = constants.PLAYER_SPEED
+
+    player.move(dx, dy)
 
 
 # Initialize Pygame and create display screen

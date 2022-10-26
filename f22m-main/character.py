@@ -24,22 +24,21 @@ class Character(pygame.sprite.Sprite):
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
 
-    def move(self, x, y):
+    def move(self, dx, dy):
+        move_x, move_y = self.check_for_collisions(dx, dy)
+        self.change_x_and_y(move_x, move_y)
+
+    def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
-        if x != 0 and y != 0:
-            x = x * (math.sqrt(2) / 2)
-            y = y * (math.sqrt(2) / 2)
+        if add_x != 0 and add_y != 0:
+            add_x = add_x * (math.sqrt(2) / 2)
+            add_y = add_y * (math.sqrt(2) / 2)
 
-        movex, movey = self.check_for_collisions(x, y)
-
-        self.change_x(movex)
-        self.change_y(movey)
-
-    def change_x(self, add_x):
         self.xpos += add_x
-
-    def change_y(self, add_y):
         self.ypos += add_y
+
+    # def change_y(self, add_y):
+    #     self.ypos += add_y
 
     def check_for_collisions(self, try_x=None, try_y=None):
         if try_x is None:
