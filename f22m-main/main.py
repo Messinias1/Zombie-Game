@@ -1,5 +1,6 @@
 import pygame
 import constants
+import math
 
 from item import Item
 from character import Character
@@ -20,24 +21,30 @@ def handle_input(player):
         exit()
 
     # WASD --> player movement
+    dx = 0
+    dy = 0
     if keys[pygame.K_a]:
-        player.move(-constants.PLAYER_SPEED, 0)
+        dx = -constants.PLAYER_SPEED
     if keys[pygame.K_d]:
-        player.move(constants.PLAYER_SPEED, 0)
+        dx = constants.PLAYER_SPEED
     if keys[pygame.K_w]:
-        player.move(0, -constants.PLAYER_SPEED)
+        dy = -constants.PLAYER_SPEED
     if keys[pygame.K_s]:
-        player.move(0, constants.PLAYER_SPEED)
+        dy = constants.PLAYER_SPEED
+
+    player.move(dx, dy)
 
 
 # Initialize Pygame and create display screen
 pygame.init()
+clock = pygame.time.Clock()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = World("assets/rooms/layout1.json")
+world_room = World()
+world_room.generate("assets/rooms/layout1.json")
 # create player
 player = Character(400, 300, "assets/images/characters/elf", world_room)
 
@@ -57,15 +64,19 @@ def quit_game():
 # Create Items:
 coin = Item(400, 300, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
 
+
+
 # Add sprites to world sprite group here so that they can be drawn:
 world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(coin)
+
 
 # main game loop
 run = True
 
 while run:
     # Background Color
+    clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
 
     # event handler
