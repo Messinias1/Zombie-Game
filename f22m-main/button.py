@@ -1,6 +1,5 @@
 import string
 import pygame as pg
-import constants
 pg.init()
 pg.font.init()
 
@@ -73,7 +72,7 @@ class Button:
         display, on_click_function
         """
         self.draw_button(display)
-        self.perform_mouse_click(on_click_function, display)
+        it_works:bool = self.perform_mouse_click(on_click_function, display)
         
 
 

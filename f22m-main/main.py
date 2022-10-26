@@ -49,11 +49,11 @@ world_room.generate("assets/rooms/layout1.json")
 player = Character(400, 300, "assets/images/characters/elf", world_room)
 
 # create quit button
-quit_button = Button(some_width = 75, 
-                     some_height = 30, 
-                     some_position_x = 10, 
-                     some_position_y = 460, 
-                     some_text = 'Quit', 
+quit_button = Button(some_width = 75,
+                     some_height = 30,
+                     some_position_x = 10,
+                     some_position_y = 560,
+                     some_text = 'Quit',
                      some_text_position_x = 29)
 
 # quit button function
