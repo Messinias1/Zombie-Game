@@ -43,7 +43,9 @@ class Button:
         background_color, display
         """
 
-        pg.draw.rect(display, background_color, (self.position_x, self.position_y, self.width, self.height), 0)
+        pg.draw.rect(display, background_color, (self.position_x, self.position_y, self.width, self.height), 0, 4)
+        # ADD A VERTICAL LINE FOR SHADOW EFFECT
+        pg.draw.rect(display, self.fillColors['hover'], (self.position_x + 3, self.position_y + 25, self.width - 3, self.height - 25), 0, 4)
         text_position = (self.text_position_x, (self.position_y + 3))
         
         # rendering the button and displaying the text on it
