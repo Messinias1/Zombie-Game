@@ -1,6 +1,6 @@
 import string
 import pygame as pg
-pg.init()
+
 pg.font.init()
 
 class Button:
@@ -60,7 +60,9 @@ class Button:
         on_click_function, display
         """
         # handling the button click and calling the parameter function with the action
-        if pg.mouse.get_pressed(num_buttons = 3)[0] and pg.rect(display, self.fillColors['normal'], (self.position_x, self.position_y, self.width, self.height), 0).collidepoint(pg.mouse.get_pos()):
+        # if pg.mouse.get_pressed(num_buttons = 3)[0] and pg.rect((self.position_x, self.position_y, self.width, self.height), 0).collidepoint(pg.mouse.get_pos()):
+        mouse_position_x, mouse_position_y = pg.mouse.get_pos()
+        if pg.mouse.get_pressed(num_buttons = 3)[0] and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             on_click_function()
 
     def implement_button(self, display, on_click_function: None) -> None:
@@ -72,7 +74,7 @@ class Button:
         display, on_click_function
         """
         self.draw_button(display)
-        it_works:bool = self.perform_mouse_click(on_click_function, display)
+        self.perform_mouse_click(on_click_function, display)
         
 
 
