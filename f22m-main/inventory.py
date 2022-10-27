@@ -2,7 +2,16 @@ from weapon import Weapon
 from gun import Gun
 
 class Inventory:
+    """This Class creates an inventory to store various items and weapons
+    """
     def __init__(self, gun_list:list = None, melee_list:list = None, throwable:Weapon = None):
+        """This creates a new Inventory Object
+
+            Parameters:
+                gun_list {list}: takes in a list
+                melee_list {list}: takes in a list
+                throwable {Weapon}: takes in a Weapon
+        """
         if gun_list:
             self.gun_list_ = gun_list
         else:
@@ -16,12 +25,33 @@ class Inventory:
         self.throwable_ = throwable
 
     def add_gun(self, gun:Gun):
+        """This adds a gun into the gun list
+
+            Parameters:
+                gun {Gun}: takes in a Gun
+        """
+
         self.gun_list_.append(gun)
 
     def add_melee(self, melee:Weapon):
+        """This adds a melee weapon to the melee list
+
+            Parameters:
+                melee {Weapon}: takes in a Weapon
+        """
+
         self.melee_list_.append(melee)
     
     def get_gun(self, gunName)->Gun:
+        """This returns a gun
+
+            Parameters:
+                gunName {string}: takes in a string
+            
+            Returns:
+                Gun: a gun object
+        """
+
         for gun in self.gun_list_:
             if gunName == gun.get_name():
                 return gun
