@@ -5,6 +5,7 @@ import math
 from item import Item
 from character import Character
 from world import World
+from button import Button
 
 
 def handle_input(player):
@@ -47,6 +48,19 @@ world_room.generate("assets/rooms/layout1.json")
 # create player
 player = Character(400, 300, "assets/images/characters/elf", world_room)
 
+# create quit button
+quit_button = Button(some_width = 75,
+                     some_height = 30,
+                     some_position_x = 10,
+                     some_position_y = 560,
+                     some_text = 'Quit',
+                     some_text_position_x = 29)
+
+# quit button function
+def quit_game():
+    pygame.quit()
+    exit()
+
 # Create Items:
 coin = Item(400, 300, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
 
@@ -73,6 +87,9 @@ while run:
     world_room.camera.follow_character(player)
     # draw everything in the room on screen
     world_room.room_sprite_group.draw(screen)
+    # quit button actions
+    quit_button.implement_button(screen, quit_game)
+
     pygame.display.update()
 
 pygame.quit()
