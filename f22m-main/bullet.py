@@ -37,7 +37,7 @@ class Bullet:
         """This Updates the Bullet position on the screen
 
             Parameters:
-                screen {Screen}: takes in the screen object 
+                screen {Screen}: takes in the screen object
         """
 
         self.x_ -= int(self.x_velocity_)
