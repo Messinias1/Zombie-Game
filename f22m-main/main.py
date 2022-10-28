@@ -79,7 +79,7 @@ while run:
     clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
 
-    # event handler
+    # event handler 
     handle_input(player)
 
     # run the .update() functions for everything in the room
