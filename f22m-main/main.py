@@ -83,7 +83,7 @@ while run:
     handle_input(player)
 
     # run the .update() functions for everything in the room
-    world_room.update_room_sprites()
+    world_room.update_room_sprite_group()
     world_room.camera.follow_character(player)
     # draw everything in the room on screen
     world_room.room_sprite_group.draw(screen)

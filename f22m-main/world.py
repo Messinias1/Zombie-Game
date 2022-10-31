@@ -34,7 +34,7 @@ class World:
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
 
-    def update_room_sprites(self) -> None:
+    def update_room_sprite_group(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
         for sprite in self.room_sprite_group:
             sprite.update()
