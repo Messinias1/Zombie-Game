@@ -6,13 +6,20 @@ import camera
 
 class World:
     def __init__(self):
-        self.camera = camera.Camera(100, 100)  # set the camera x and y to 0
-        self.room_sprites = []
-        self.flip = False
+        """Class for rooms. When creating a new room for a level, create a new World object"""
+        self.camera = camera.Camera(100, 100)  # create a new camera & set its initial x and y
+
+        # this will store all walls in the current room
+        # when characters handle wall collision, this group will be used
+        self.room_wall_group = pygame.sprite.Group()
+
+        # this will store each pygame.sprite in the current room (including walls)
+        # when everything in a room needs to .update(), this group will be used
         self.room_sprite_group = pygame.sprite.Group()
-        self.DIMENSIONS = [0, 0]  # keep track of dimensions of all walls in the room?
 
     def generate(self, layout_file: str) -> None:
+        """Generates the map and stores it in self.room_sprites & self.room_sprite_group
+        :param layout_file The json file where the map desired layout is stored."""
         with open(layout_file, "r") as f:
             layout = json.loads(f.read())
         y = 0
@@ -21,11 +28,12 @@ class World:
             for char in row:
                 if char == "W":
                     this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif", self)
-                    self.room_sprites.append(this_tile)
+                    self.room_wall_group.add(this_tile)
                     self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
 
     def update_room_sprites(self) -> None:
+        """Runs the update() method for each sprite stored in self.room_sprite_group"""
         for sprite in self.room_sprite_group:
             sprite.update()
