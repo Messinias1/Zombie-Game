@@ -1,3 +1,5 @@
+import math
+
 import pygame
 import constants
 import os
@@ -22,23 +24,28 @@ class Character(pygame.sprite.Sprite):
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
 
-    def move(self, x, y):
-        movex, movey = self.check_for_collisions(x, y)
-        self.change_y(movey)
-        self.change_x(movex)
+    def move(self, dx, dy):
+        move_x, move_y = self.check_for_collisions(dx, dy)
+        self.change_x_and_y(move_x, move_y)
 
-    def change_x(self, add_x):
+    def change_x_and_y(self, add_x, add_y):
+        # control diagonal movement
+        if add_x != 0 and add_y != 0:
+            add_x = add_x * (math.sqrt(2) / 2)
+            add_y = add_y * (math.sqrt(2) / 2)
+
         self.xpos += add_x
-
-    def change_y(self, add_y):
         self.ypos += add_y
+
+    # def change_y(self, add_y):
+    #     self.ypos += add_y
 
     def check_for_collisions(self, try_x=None, try_y=None):
         if try_x is None:
             try_x = 0
         if try_y is None:
             try_y = 0
-        walls = self.world.room_sprites
+        walls = self.world.room_wall_group
         move_x, move_y = try_x, try_y
         for wall in walls:
             if wall.rect.collidepoint(self.rect.x + (wall.width/2), self.rect.y + try_y + (wall.height/2)):  # collisioin going in y direction
