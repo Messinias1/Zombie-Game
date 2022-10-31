@@ -54,7 +54,7 @@ quit_button = Button(some_width = 75,
                      some_position_x = 10,
                      some_position_y = 560,
                      some_text = 'Quit',
-                     some_text_position_x = 29)
+                     some_text_position_x = 27)
 
 # quit button function
 def quit_game():
@@ -79,7 +79,7 @@ while run:
     clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
 
-    # event handler
+    # event handler 
     handle_input(player)
 
     # run the .update() functions for everything in the room

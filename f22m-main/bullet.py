@@ -2,7 +2,19 @@ import pygame
 import math
 
 class Bullet:
-    def __init__(self, x:int, y:int , mouse_x, mouse_y) -> None:
+    """This creats a new Bullet on screen
+    """
+    
+    def __init__(self, x:int, y:int , mouse_x:int, mouse_y:int) -> None:
+        """This creates a new Rational Object
+
+            Parameters:
+                x {int}: takes an integer
+                y {int}: takes an integer
+                mouse_x {int}: takes an integer
+                mouse_y {int}: takes an integer
+        """
+
         self.x_ = x
         self.y_ = y
         self.mouse_x_ = mouse_x
@@ -13,10 +25,21 @@ class Bullet:
         self.y_velocity_ = math.sin(self.angle_) * self.speed_
 
     def get_position(self):
+        """This Returns the position of the bullet
+            Returns:
+                pair: current x and y positions
+        """
+        
         position = (self.x_, self.y_)
         return position
-        
-    def main(self, screen):
+    
+    def update_position(self, screen):
+        """This Updates the Bullet position on the screen
+
+            Parameters:
+                screen {Screen}: takes in the screen object
+        """
+
         self.x_ -= int(self.x_velocity_)
         self.y_ -= int(self.y_velocity_)
         black = 0, 0, 0
