@@ -52,8 +52,13 @@ world_room = World()
 world_room.generate("assets/rooms/layout1.json")
 
 # create player
-player_img = "assets/images/characters/elf"
-player = Character(400, 300, player_img, world_room)
+animations_list = []
+for i in range(4):
+    img = pygame.image.load(f"assets/images/characters/elf/idle/{i}.png").convert_alpha()
+    animations_list.append(img)
+
+# player_img = "assets/images/characters/elf"
+player = Character(400, 300, world_room, animations_list)
 
 # create quit button
 quit_button = Button(some_width = 75,
