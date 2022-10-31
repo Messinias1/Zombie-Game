@@ -25,7 +25,6 @@ def handle_input(player):
     dy = 0
     if keys[pygame.K_a]:
         dx = -constants.PLAYER_SPEED
-        player.flip_char(screen)
         # pygame.transform.flip(world_room.room_sprite_group.add(screen), True, False)
     if keys[pygame.K_d]:
         dx = constants.PLAYER_SPEED
