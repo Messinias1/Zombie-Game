@@ -10,6 +10,7 @@ class Character(pygame.sprite.Sprite):
            img --> image for the character sprite
            in_room --> world object where this character is drawn"""
         super().__init__()
+        self.flip = False
         self.images = []
         [self.images.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
@@ -21,8 +22,10 @@ class Character(pygame.sprite.Sprite):
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
 
-    def draw(self, surface):
-        pygame.draw.rect(surface, constants.RED, self.rect)
+    def flip_char(self, surface):
+        flipped_image = pygame.transform.flip(self.image, True, False)
+        surface.blit(flipped_image, self.rect)
+
 
     def move(self, dx, dy):
         move_x, move_y = self.check_for_collisions(dx, dy)
@@ -37,8 +40,6 @@ class Character(pygame.sprite.Sprite):
         self.xpos += add_x
         self.ypos += add_y
 
-    # def change_y(self, add_y):
-    #     self.ypos += add_y
 
     def check_for_collisions(self, try_x=None, try_y=None):
         if try_x is None:

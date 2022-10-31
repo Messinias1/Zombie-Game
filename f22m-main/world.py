@@ -8,6 +8,7 @@ class World:
     def __init__(self):
         self.camera = camera.Camera(100, 100)  # set the camera x and y to 0
         self.room_sprites = []
+        self.flip = False
         self.room_sprite_group = pygame.sprite.Group()
         self.DIMENSIONS = [0, 0]  # keep track of dimensions of all walls in the room?
 
