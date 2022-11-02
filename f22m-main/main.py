@@ -4,6 +4,7 @@ import math
 
 from item import Item
 from character import Character
+from zombie import Zombie
 from world import World
 from button import Button
 
@@ -47,6 +48,7 @@ world_room = World()
 world_room.generate("assets/rooms/layout1.json")
 # create player
 player = Character(400, 300, "assets/images/characters/elf", world_room)
+zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -71,6 +73,7 @@ coin_sprites = pygame.sprite.Group()
 
 #Add sprites to respective sprite groups here so that they can be drawn:
 world_room.room_sprite_group.add(player)
+world_room.room_sprite_group.add(zombie)
 
 for coin in coin_list:
     coin_sprites.add(coin)
