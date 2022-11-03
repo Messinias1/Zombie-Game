@@ -4,6 +4,7 @@ import math
 
 from item import Item
 from character import Character
+from zombie import Zombie
 from world import World
 from button import Button
 
@@ -47,6 +48,7 @@ world_room = World()
 world_room.generate("assets/rooms/layout1.json")
 # create player
 player = Character(400, 300, "assets/images/characters/elf", world_room)
+zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -62,14 +64,19 @@ def quit_game():
     exit()
 
 # Create Items:
-coin = Item(400, 300, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
+coin_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room), 
+              Item(300, 200, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
+]
 
+#Create Sprite Groups:
+coin_sprites = pygame.sprite.Group()
 
-
-# Add sprites to world sprite group here so that they can be drawn:
+#Add sprites to respective sprite groups here so that they can be drawn:
 world_room.room_sprite_group.add(player)
-world_room.room_sprite_group.add(coin)
+world_room.room_sprite_group.add(zombie)
 
+for coin in coin_list:
+    coin_sprites.add(coin)
 
 # main game loop
 run = True
@@ -79,13 +86,23 @@ while run:
     clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
 
+    #Coin Collision Handeling:
+    if pygame.sprite.spritecollide(player, coin_sprites, True):
+        player.coins += 1
+        print(player.coins)
+
     # event handler 
     handle_input(player)
 
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
+
+    for coin in coin_list:
+        coin.update()
+
     world_room.camera.follow_character(player)
     # draw everything in the room on screen
+    coin_sprites.draw(screen)
     world_room.room_sprite_group.draw(screen)
     # quit button actions
     quit_button.implement_button(screen, quit_game)
