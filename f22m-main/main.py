@@ -26,18 +26,13 @@ def handle_input(player):
     dy = 0
     if keys[pygame.K_a]:
         dx = -constants.PLAYER_SPEED
-        # pygame.transform.flip(world_room.room_sprite_group.add(screen), True, False)
     if keys[pygame.K_d]:
         dx = constants.PLAYER_SPEED
-        # world_room.room_sprite_group.add(player)
     if keys[pygame.K_w]:
         dy = -constants.PLAYER_SPEED
-        # world_room.room_sprite_group.add(player)
     if keys[pygame.K_s]:
         dy = constants.PLAYER_SPEED
-        # world_room.room_sprite_group.add(player)
 
-    world_room.room_sprite_group.add(player)
     player.move(dx, dy)
 
 
@@ -51,19 +46,9 @@ pygame.display.set_caption("Zombie Game")
 # create the world
 world_room = World()
 world_room.generate("assets/rooms/layout1.json")
-
 # create player
-
-animations_list = []
-for i in range(4):
-    img = pygame.image.load(f"assets/images/characters/elf/idle/{i}.png").convert_alpha()
-    animations_list.append(img)
-
-# player_img = "assets/images/characters/elf"
-player = Character(400, 300, world_room, animations_list)
-player = Character(400, 300, "assets/images/characters/elf", world_room)
+player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
-
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -86,18 +71,12 @@ coin_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 100, "DEFAULT", 
 #Create Sprite Groups:
 coin_sprites = pygame.sprite.Group()
 
-
-# Add sprites to world sprite group here so that they can be drawn:
-# world_room.room_sprite_group.add(player)
-# if keys[pygame.K_a]:
-#     dx = -constants.PLAYER_SPEED
-#     player.flip_char(screen)
-world_room.room_sprite_group.add(coin)
 #Add sprites to respective sprite groups here so that they can be drawn:
 world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(zombie)
 
 for coin in coin_list:
+    world_room.room_sprite_group.add(coin)
     coin_sprites.add(coin)
 
 # main game loop
