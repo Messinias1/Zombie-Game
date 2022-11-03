@@ -76,6 +76,7 @@ world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(zombie)
 
 for coin in coin_list:
+    world_room.room_sprite_group.add(coin)
     coin_sprites.add(coin)
 
 # main game loop
