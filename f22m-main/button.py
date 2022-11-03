@@ -92,8 +92,12 @@ class Button:
         
         if event.type == pg.MOUSEBUTTONDOWN and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             self.draw_button(self.fillColors['pressed'], display)
+            return self.mouse_is_working
         elif event.type == pg.MOUSEBUTTONUP and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             on_click_function()
+            return self.mouse_is_working
+        else:
+            return self.mouse_is_not_working
 
     def perform_mouse_hover(self, display) -> bool:
         """
