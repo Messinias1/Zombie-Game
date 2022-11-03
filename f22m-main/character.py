@@ -5,24 +5,25 @@ import constants
 import os
 
 class Character(pygame.sprite.Sprite):
-    def __init__(self, x, y, in_room, animation_list):
+    def __init__(self, x, y, images_path, in_room):
         # """x, y --> the character's starting position
         #    img --> image for the character sprite
         #    in_room --> world object where this character is drawn"""
         super().__init__()
 
-
-        # self.images = []
-        # [self.images.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
+        self.animation_list = []
+        # append all the images in the directory to self.images
+        [self.animation_list.append(images_path + "/idle/" + filename) for filename in os.listdir(images_path + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
         # I haven't coded anything that makes the animation play
         # I only set the main image to the first file found in the dir
-        # for i in range(4):
-        #     self.image = pygame.image.load(self.images[i])
+
+        # convert all images
+        for i in range(len(self.animation_list)):
+            self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
-        self.animation_list = animation_list
-        self.image = animation_list[self.frame_index]
+        self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
         self.dir = "left"
         self.world = in_room
