@@ -47,7 +47,7 @@ pygame.display.set_caption("Zombie Game")
 world_room = World()
 world_room.generate("assets/rooms/layout1.json")
 # create player
-player = Character(400, 300, "assets/images/characters/elf", world_room)
+player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
 
 # create quit button
