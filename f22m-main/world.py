@@ -16,6 +16,7 @@ class World:
         # this will store each pygame.sprite in the current room (including walls)
         # when everything in a room needs to .update(), this group will be used
         self.room_sprite_group = pygame.sprite.Group()
+        self.ROOM_DIMENSIONS = [0, 0]
 
     def generate(self, layout_file: str) -> None:
         """Generates the map and stores it in self.room_sprites & self.room_sprite_group
@@ -40,6 +41,7 @@ class World:
                     self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
+        self.ROOM_DIMENSIONS = [x, y]
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
