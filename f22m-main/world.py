@@ -19,7 +19,6 @@ class World:
 
     def generate(self, layout_file: str) -> None:
         """Generates the map and stores it in self.room_sprites & self.room_sprite_group
-
         :param layout_file The json file where the map desired layout is stored."""
         with open(layout_file, "r") as f:
             layout = json.loads(f.read())
@@ -29,6 +28,12 @@ class World:
             for char in row:
                 if char == "W":
                     this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif", self)
+                if char == "B":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/black.gif", self)
+                    self.room_wall_group.add(this_tile)
+                    self.room_sprite_group.add(this_tile)
+                if char == "S":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/stone.gif", self)
                     self.room_wall_group.add(this_tile)
                     self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels

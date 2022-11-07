@@ -50,7 +50,7 @@ pygame.display.set_caption("Zombie Game")
 world_room = World()
 world_room.generate("assets/rooms/layout1.json")
 # create player
-player = Character(400, 300, "assets/images/characters/elf", world_room)
+player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
 
 # create quit button
@@ -79,6 +79,7 @@ world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(zombie)
 
 for coin in coin_list:
+    world_room.room_sprite_group.add(coin)
     coin_sprites.add(coin)
 
 # main game loop
