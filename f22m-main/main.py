@@ -14,6 +14,9 @@ def handle_input(player):
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
+        
+        #performs click event for the quit button
+        quit_button.perform_mouse_click(event, quit_game, screen)
 
     keys = pygame.key.get_pressed()
 
@@ -86,6 +89,7 @@ while run:
     # Background Color
     clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
+    quit_button.implement_button(screen, quit_game)
 
     #Coin Collision Handeling:
     if pygame.sprite.spritecollide(player, coin_sprites, True):
@@ -106,7 +110,6 @@ while run:
     coin_sprites.draw(screen)
     world_room.room_sprite_group.draw(screen)
     # quit button actions
-    quit_button.implement_button(screen, quit_game)
 
     pygame.display.update()
 
