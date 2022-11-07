@@ -79,11 +79,18 @@ world_room.room_sprite_group.add(player)
 world_room.room_sprite_group.add(zombie)
 
 for coin in coin_list:
-    world_room.room_sprite_group.add(coin)
-    coin_sprites.add(coin)
+    world_room.room_sprite_group.add(coin) 
+    coin_sprites.add(coin) 
 
 # main game loop
 run = True
+
+#Coin Text:
+font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
+txt = font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
+txt_rect = txt.get_rect()
+
+txt_rect.center = (800-(txt.get_rect().width), 0+(txt.get_rect().height))
 
 while run:
     # Background Color
@@ -93,7 +100,7 @@ while run:
     #Coin Collision Handeling:
     if pygame.sprite.spritecollide(player, coin_sprites, True):
         player.coins += 1
-        print(player.coins)
+        txt = font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
 
     # draw everything in the room on screen
     coin_sprites.draw(screen)
@@ -113,6 +120,9 @@ while run:
 
     world_room.camera.follow_character(player)
     
+
+    #Currency Text Display
+    screen.blit(txt, txt_rect)
 
     pygame.display.update()
 
