@@ -3,16 +3,24 @@ import constants
 import os
 import math
 
+
 class Zombie(pygame.sprite.Sprite):
-    def __init__(self, x, y, imgpath,in_room):
+    def __init__(self, x, y, imgpath, in_room):
         self.rect = pygame.Rect(32, 32, 16, 16)
         super().__init__()
-        self.images = []
-        [self.images.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
+        self.dir = "left"
+        self.animation_list = []
+        [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
         # I haven't coded anything that makes the animation play
         # I only set the main image to the first file found in the dir
-        self.image = pygame.image.load(self.images[0])
+        self.image = pygame.image.load(self.animation_list[0])
+        # convert all images
+        for i in range(len(self.animation_list)):
+            self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
+        self.frame_index = 0
+        self.update_time = pygame.time.get_ticks()
+        self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
         self.world = in_room
         self.xpos, self.ypos = x, y
@@ -39,6 +47,15 @@ class Zombie(pygame.sprite.Sprite):
                     self.rect.top = wall.rect.bottom
 
     def update(self, camera_ref=None):
+        animation_cooldown = 70
+        self.image = self.animation_list[self.frame_index]
+        if self.dir == "right":
+            self.flip_char()
+        if pygame.time.get_ticks() - self.update_time > animation_cooldown:
+            self.frame_index += 1
+            self.update_time = pygame.time.get_ticks()
+        if self.frame_index >= len(self.animation_list):
+            self.frame_index = 0
         # take into account camera scroll when setting position
         if camera_ref is None:
             camera_ref = self.world.camera
