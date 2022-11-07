@@ -31,7 +31,7 @@ class Zombie(pygame.sprite.Sprite):
         # Find direction vector (dx, dy) between enemy and player.
         dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
         dist = math.hypot(dx, dy)
-        # If dist becomes 0, the program crashes due to dividing 0
+        # If dist becomes 0, the program crashes due to dividing by 0
         if dist==0:
             dist = 0.1            
         dx, dy = dx / dist, dy / dist  # Normalize.
