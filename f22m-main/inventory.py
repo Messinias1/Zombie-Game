@@ -1,5 +1,4 @@
 from weapon import Weapon
-from gun import Gun
 
 class Inventory:
     """This Class creates an inventory to store various items and weapons
@@ -15,7 +14,24 @@ class Inventory:
         if gun_list:
             self.gun_list_ = gun_list
         else:
-            pistol = Gun("Default Pistol", 10, 500, 12, 30, 100, 100, 12)
+            textures = {'spritesheet': 'No/path/for/now'}
+            stats = {
+                'damage': 25,
+                'accuracy': 2,
+                'firerate': .1,
+                'reload_speed': .5,
+                'ammo_size': 300,
+                'ammo_type': 'None',
+                'guntype': 'ranged',
+                'name': 'Pistol'
+            }
+            sounds = {
+                'shot': 'None',
+                'empty': 'None',
+                'reloading': 'None',
+            }
+            
+            pistol = Weapon(self, textures, stats, sounds)
             self.gun_list_ = [pistol]
         if melee_list:
             self.melee_list_ = melee_list
@@ -24,11 +40,11 @@ class Inventory:
 
         self.throwable_ = throwable
 
-    def add_gun(self, gun:Gun):
+    def add_gun(self, gun:Weapon):
         """This adds a gun into the gun list
 
             Parameters:
-                gun {Gun}: takes in a Gun
+                gun {Weapon}: takes in a Weapon
         """
 
         self.gun_list_.append(gun)
@@ -42,14 +58,14 @@ class Inventory:
 
         self.melee_list_.append(melee)
     
-    def get_gun(self, gunName)->Gun:
+    def get_gun(self, gunName)->Weapon:
         """This returns a gun
 
             Parameters:
                 gunName {string}: takes in a string
             
             Returns:
-                Gun: a gun object
+                Weapon: a gun object
         """
 
         for gun in self.gun_list_:
