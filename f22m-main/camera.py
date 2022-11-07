@@ -19,13 +19,13 @@ class Camera:
         in_room = char.world
         # don't let the camera go further to the right
         if self.x_scroll - constants.SCREEN_WIDTH < -in_room.ROOM_DIMENSIONS[0]:
-            self.x_scroll = -in_room.ROOM_DIMENSIONS[0] + constants.SCREEN_WIDTH
+            self.x_scroll = constants.SCREEN_WIDTH - in_room.ROOM_DIMENSIONS[0]
         # don't let the camera go further to the left
         if self.x_scroll > 0:
             self.x_scroll = 0
         # don't let the camera go further below
         if self.y_scroll - constants.SCREEN_HEIGHT < -in_room.ROOM_DIMENSIONS[1]:
-            self.y_scroll = -in_room.ROOM_DIMENSIONS[1] + constants.SCREEN_HEIGHT
+            self.y_scroll = constants.SCREEN_HEIGHT - in_room.ROOM_DIMENSIONS[1]
         # don't let the camera go further above
         if self.y_scroll > 0:
             self.y_scroll = 0
