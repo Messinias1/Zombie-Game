@@ -89,14 +89,20 @@ while run:
     # Background Color
     clock.tick(constants.FPS)
     screen.fill(constants.SURFACE_COLOR)
-    quit_button.implement_button(screen, quit_game)
 
     #Coin Collision Handeling:
     if pygame.sprite.spritecollide(player, coin_sprites, True):
         player.coins += 1
         print(player.coins)
 
-    # event handler 
+    # draw everything in the room on screen
+    coin_sprites.draw(screen)
+    world_room.room_sprite_group.draw(screen)
+
+    # create quit button
+    quit_button.implement_button(screen, quit_game)
+
+    # event handler
     handle_input(player)
 
     # run the .update() functions for everything in the room
@@ -106,10 +112,7 @@ while run:
         coin.update()
 
     world_room.camera.follow_character(player)
-    # draw everything in the room on screen
-    coin_sprites.draw(screen)
-    world_room.room_sprite_group.draw(screen)
-    # quit button actions
+    
 
     pygame.display.update()
 
