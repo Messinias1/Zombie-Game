@@ -26,8 +26,8 @@ class Zombie(pygame.sprite.Sprite):
         # Move along this normalized vector towards the player at current speed.
         self.rect.x += dx * 3
         self.rect.y += dy * 3
-
-        for wall in wall:
+        walls = self.world.room_wall_group
+        for wall in walls:
             if self.rect.colliderect(wall.rect):
                 if dx > 0: # Moving right; Hit the left side of the wall
                     self.rect.right = wall.rect.left
@@ -37,3 +37,10 @@ class Zombie(pygame.sprite.Sprite):
                     self.rect.bottom = wall.rect.top
                 if dy < 0: # Moving up; Hit the bottom side of the wall
                     self.rect.top = wall.rect.bottom
+
+    def update(self, camera_ref=None):
+        # take into account camera scroll when setting position
+        if camera_ref is None:
+            camera_ref = self.world.camera
+        self.rect.x = self.xpos + camera_ref.x_scroll
+        self.rect.y = self.ypos + camera_ref.y_scroll
