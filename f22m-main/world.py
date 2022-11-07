@@ -26,13 +26,15 @@ class World:
         for row in layout:
             x = 0
             for char in row:
-                if char == "W":
-                    this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif", self)
-                if char == "B":
+                if char.lower() == "w":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/wood.jpg", self)
+                    self.room_wall_group.add(this_tile)
+                    self.room_sprite_group.add(this_tile)
+                if char.lower() == "b":
                     this_tile = wall.Wall(x, y, "assets/images/walls/black.gif", self)
                     self.room_wall_group.add(this_tile)
                     self.room_sprite_group.add(this_tile)
-                if char == "S":
+                if char.lower() == "s":
                     this_tile = wall.Wall(x, y, "assets/images/walls/stone.gif", self)
                     self.room_wall_group.add(this_tile)
                     self.room_sprite_group.add(this_tile)
