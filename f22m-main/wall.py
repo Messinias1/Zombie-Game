@@ -1,6 +1,6 @@
 import pygame
 
-RESIZE_HEIGHT, RESIZE_WIDTH = 1.45, 1.3
+RESIZE_HEIGHT, RESIZE_WIDTH = 1.5, 1.3
 # scale each wall's collision rect by these values
 SHIFT_Y, SHIFT_X = 1 / 1.8, 1 / 3.7
 # shift each wall's collision rects by these values
