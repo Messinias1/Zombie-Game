@@ -16,10 +16,10 @@ class World:
         # this will store each pygame.sprite in the current room (including walls)
         # when everything in a room needs to .update(), this group will be used
         self.room_sprite_group = pygame.sprite.Group()
+        self.ROOM_DIMENSIONS = [0, 0]
 
     def generate(self, layout_file: str) -> None:
         """Generates the map and stores it in self.room_sprites & self.room_sprite_group
-
         :param layout_file The json file where the map desired layout is stored."""
         with open(layout_file, "r") as f:
             layout = json.loads(f.read())
@@ -27,12 +27,21 @@ class World:
         for row in layout:
             x = 0
             for char in row:
-                if char == "W":
-                    this_tile = wall.Wall(x, y, "assets/images/walls/reg.gif", self)
+                if char.lower() == "w":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/wood.jpg", self)
+                    self.room_wall_group.add(this_tile)
+                    self.room_sprite_group.add(this_tile)
+                if char.lower() == "b":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/black.gif", self)
+                    self.room_wall_group.add(this_tile)
+                    self.room_sprite_group.add(this_tile)
+                if char.lower() == "s":
+                    this_tile = wall.Wall(x, y, "assets/images/walls/stone.gif", self)
                     self.room_wall_group.add(this_tile)
                     self.room_sprite_group.add(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
+        self.ROOM_DIMENSIONS = [x, y]
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
