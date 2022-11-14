@@ -27,10 +27,6 @@ class World:
         self._layout_file = layout_file
 
     def init_room(self) -> None:
-        """Set up the room to be drawn by the game"""
-        self.load_room()
-
-    def load_room(self) -> None:
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
