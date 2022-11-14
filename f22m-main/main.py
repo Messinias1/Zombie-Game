@@ -71,8 +71,13 @@ coin_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 100, "DEFAULT", 
               Item(300, 200, "assets/images/items/coin_f0.png", 100, "DEFAULT", world_room)
 ]
 
+potion_list = [ Item(200, 200, "assets/images/items/potion_red.png", 100, "Healable", world_room)
+
+]
+
 #Create Sprite Groups:
 coin_sprites = pygame.sprite.Group()
+healable_sprites = pygame.sprite.Group()
 
 #Add sprites to respective sprite groups here so that they can be drawn:
 world_room.room_sprite_group.add(player)
@@ -81,6 +86,10 @@ world_room.room_sprite_group.add(zombie)
 for coin in coin_list:
     world_room.room_sprite_group.add(coin) 
     coin_sprites.add(coin) 
+
+for potion in potion_list:
+    world_room.room_sprite_group.add(potion)
+    healable_sprites.add(potion)
 
 # main game loop
 run = True
@@ -92,6 +101,13 @@ txt_rect = txt.get_rect()
 
 txt_rect.center = (800-(txt.get_rect().width), 0+(txt.get_rect().height))
 
+#Health Text:
+health_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
+health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+health_txt_rect = health_txt.get_rect()
+
+health_txt_rect.center = (0+(txt.get_rect().width), 0+(txt.get_rect().height))
+
 while run:
     # Background Color
     clock.tick(constants.FPS)
@@ -102,8 +118,14 @@ while run:
         player.coins += 1
         txt = font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
 
+    if pygame.sprite.spritecollide(player, healable_sprites, True):
+        #Heal Player
+        player.health += 1
+        health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+
     # draw everything in the room on screen
     coin_sprites.draw(screen)
+    healable_sprites.draw(screen)
     world_room.room_sprite_group.draw(screen)
 
     # create quit button
@@ -117,12 +139,15 @@ while run:
 
     for coin in coin_list:
         coin.update()
+    
+    for potion in potion_list:
+        potion.update()
 
     world_room.camera.follow_character(player)
-    
 
     #Currency Text Display
     screen.blit(txt, txt_rect)
+    screen.blit(health_txt, health_txt_rect)
 
     pygame.display.update()
 
