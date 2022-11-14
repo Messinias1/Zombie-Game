@@ -5,8 +5,13 @@ import camera
 
 
 class World:
-    def __init__(self):
-        """Class for rooms. When creating a new room for a level, create a new World object"""
+    def __init__(self, layout_file: str):
+        """Class for rooms. When creating a new room for a level, create a new World object.
+
+        Running only the init will NOT prepare the map, it will only store the file where it will later load it from.
+        To load the map run self.init_room()
+
+        :param layout_file The json file where the map desired layout is stored."""
         self.camera = camera.Camera(100, 100)  # create a new camera & set its initial x and y
 
         # this will store all walls in the current room
@@ -17,11 +22,16 @@ class World:
         # when everything in a room needs to .update(), this group will be used
         self.room_sprite_group = pygame.sprite.Group()
         self.ROOM_DIMENSIONS = [0, 0]
+        self._layout_file = layout_file
 
-    def generate(self, layout_file: str) -> None:
-        """Generates the map and stores it in self.room_sprites & self.room_sprite_group
-        :param layout_file The json file where the map desired layout is stored."""
-        with open(layout_file, "r") as f:
+    def init_room(self, enable_pathfinding: bool = True) -> None:
+        """Set up the room to be drawn by the game
+        :param enable_pathfinding specifies whether to load the layout file into Pathfinding"""
+        self.load_room()
+
+    def load_room(self) -> None:
+        """Prepares the map and stores it in self.room_sprites & self.room_sprite_group"""
+        with open(self._layout_file, "r") as f:
             layout = json.loads(f.read())
         y = 0
         for row in layout:
