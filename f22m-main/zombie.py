@@ -36,6 +36,7 @@ class Zombie(pygame.sprite.Sprite):
             dist = 0.1            
         dx, dy = dx / dist, dy / dist  # Normalize.
         # Move along this normalized vector towards the player at current speed.
+
         self.xpos += dx * 1
         self.ypos += dy * 1
 

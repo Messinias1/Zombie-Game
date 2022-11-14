@@ -65,10 +65,11 @@ class Character(pygame.sprite.Sprite):
         walls = self.world.room_wall_group
         move_x, move_y = try_x, try_y
         for wall in walls:
-            if wall.rect.collidepoint(self.rect.x + (wall.width/2), self.rect.y + try_y + (wall.height/2)):  # collisioin going in y direction
+            if wall.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collisioin going in y direction
                 move_y = 0
-            if wall.rect.collidepoint(self.rect.x + try_x + (wall.width/2), self.rect.y + (wall.height/2)):  # collision going in x direction
+            if wall.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
                 move_x = 0
+
         return move_x, move_y
 
     def update(self, camera_ref=None):
