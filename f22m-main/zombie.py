@@ -3,6 +3,7 @@ import constants
 import os
 import math
 
+from wall import Wall
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
@@ -30,21 +31,28 @@ class Zombie(pygame.sprite.Sprite):
         # Find direction vector (dx, dy) between enemy and player.
         dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
         dist = math.hypot(dx, dy)
+        # If dist becomes 0, the program crashes due to dividing by 0
+        if dist==0:
+            dist = 0.1            
         dx, dy = dx / dist, dy / dist  # Normalize.
         # Move along this normalized vector towards the player at current speed.
-        self.rect.x += dx * 3
-        self.rect.y += dy * 3
+
+        self.xpos += dx * 1
+        self.ypos += dy * 1
+
+    def check_for_collisions(self, try_x=None, try_y=None):
+        if try_x is None:
+            try_x = 0
+        if try_y is None:
+            try_y = 0
         walls = self.world.room_wall_group
+        move_x, move_y = try_x, try_y
         for wall in walls:
-            if self.rect.colliderect(wall.rect):
-                if dx > 0: # Moving right; Hit the left side of the wall
-                    self.rect.right = wall.rect.left
-                if dx < 0: # Moving left; Hit the right side of the wall
-                    self.rect.left = wall.rect.right
-                if dy > 0: # Moving down; Hit the top side of the wall
-                    self.rect.bottom = wall.rect.top
-                if dy < 0: # Moving up; Hit the bottom side of the wall
-                    self.rect.top = wall.rect.bottom
+            if wall.rect.collidepoint(self.rect.x + (wall.width/2), self.rect.y + try_y + (wall.height/2)):  # collisioin going in y direction
+                move_y = 0
+            if wall.rect.collidepoint(self.rect.x + try_x + (wall.width/2), self.rect.y + (wall.height/2)):  # collision going in x direction
+                move_x = 0
+        return move_x, move_y
 
     def update(self, camera_ref=None):
         animation_cooldown = 70

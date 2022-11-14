@@ -29,6 +29,7 @@ class Character(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
+        self.health = 0
         self.coins = 0
 
     def draw(self, surface):
