@@ -7,15 +7,13 @@ from wall import Wall
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
-        self.rect = pygame.Rect(32, 32, 16, 16)
         super().__init__()
-        self.dir = "left"
         self.animation_list = []
         [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
         # I haven't coded anything that makes the animation play
         # I only set the main image to the first file found in the dir
-        self.image = pygame.image.load(self.animation_list[0])
+      
         # convert all images
         for i in range(len(self.animation_list)):
             self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
@@ -23,22 +21,44 @@ class Zombie(pygame.sprite.Sprite):
         self.update_time = pygame.time.get_ticks()
         self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
+        self.dir = "left"
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
 
+    def draw(self, surface):
+        pygame.draw.rect(surface, constants.RED, self.rect)
+
+    def flip_char(self):
+        flipped_image = pygame.transform.flip(self.image, True, False)
+        self.image = flipped_image
+
     def move_towards_player(self, player):
         # Find direction vector (dx, dy) between enemy and player.
-        dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y
+        dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y + 10
         dist = math.hypot(dx, dy)
         # If dist becomes 0, the program crashes due to dividing by 0
         if dist==0:
             dist = 0.1            
         dx, dy = dx / dist, dy / dist  # Normalize.
         # Move along this normalized vector towards the player at current speed.
+        move_x, move_y = self.check_for_collisions(dx, dy)
+        self.change_x_and_y(move_x, move_y)
 
-        self.xpos += dx * 1
-        self.ypos += dy * 1
+    def change_x_and_y(self, add_x, add_y):
+        # control diagonal movement
+        if self.dir == "left" and add_x < 0:
+            self.dir = "right"
+            self.flip_char()
+        if self.dir == "right" and add_x > 0:
+            self.dir = "left"
+            self.flip_char()
+        if add_x != 0 and add_y != 0:
+            add_x = add_x * 1
+            add_y = add_y * 1
+
+        self.xpos += add_x
+        self.ypos += add_y
 
     def check_for_collisions(self, try_x=None, try_y=None):
         if try_x is None:
@@ -48,10 +68,11 @@ class Zombie(pygame.sprite.Sprite):
         walls = self.world.room_wall_group
         move_x, move_y = try_x, try_y
         for wall in walls:
-            if wall.rect.collidepoint(self.rect.x + (wall.width/2), self.rect.y + try_y + (wall.height/2)):  # collisioin going in y direction
+            if wall.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collisioin going in y direction
                 move_y = 0
-            if wall.rect.collidepoint(self.rect.x + try_x + (wall.width/2), self.rect.y + (wall.height/2)):  # collision going in x direction
+            if wall.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
                 move_x = 0
+
         return move_x, move_y
 
     def update(self, camera_ref=None):
