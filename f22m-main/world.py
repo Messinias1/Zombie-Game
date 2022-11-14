@@ -57,6 +57,15 @@ class World:
             self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
 
+    def find_path(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
+        """Finds the best path between two points that avoids all walls in the room
+        :param start_x the x position to start at
+        :param start_y the y position to start at
+        :param end_x the desired x pos to end at
+        :param end_y the y pos to end at
+        :returns a list of tuples of directions to move in, formatted [(move_x1, move_y1), ...]"""
+        pass
+
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
         for sprite in self.room_sprite_group:
