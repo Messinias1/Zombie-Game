@@ -3,7 +3,7 @@ import constants
 import os
 import math
 
-from wall import Wall
+from tile import Tile
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
@@ -72,13 +72,13 @@ class Zombie(pygame.sprite.Sprite):
             try_x = 0
         if try_y is None:
             try_y = 0
-        walls = self.world.room_wall_group
+        tiles = self.world.room_tile_group
         move_x, move_y = try_x, try_y
-        for wall in walls:
-            if wall.collideable:
-                if wall.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collision going in y direction
+        for tile in tiles:
+            if tile.collideable:
+                if tile.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collision going in y direction
                     move_y = 0
-                if wall.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
+                if tile.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
                     move_x = 0
 
         return move_x, move_y

@@ -1,6 +1,6 @@
 import pygame
 import json
-from wall import Wall
+from tile import Tile
 from camera import Camera
 
 
@@ -15,9 +15,9 @@ class World:
         :param layout_file The json file where the map desired layout is stored."""
         self.camera = Camera(100, 100)  # create a new camera & set its initial x and y
 
-        # this will store all walls in the current room
+        # this will store all tiles (walls & floor tiles) in the current room
         # when characters handle wall collision, this group will be used
-        self.room_wall_group = pygame.sprite.Group()
+        self.room_tile_group = pygame.sprite.Group()
 
         # this will store each pygame.sprite in the current room (including walls)
         # when everything in a room needs to .update(), this group will be used
@@ -37,14 +37,14 @@ class World:
             this_row = []
             for char in row:
                 if char == "-":
-                    this_tile = Wall(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
+                    this_tile = Tile(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
                 if char.lower() == "w":
-                    this_tile = Wall(x, y, f"assets/images/walls/wood.gif", True, self)
+                    this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
-                    this_tile = Wall(x, y, f"assets/images/walls/black.gif", True, self)
+                    this_tile = Tile(x, y, f"assets/images/walls/black.gif", True, self)
                 if char.lower() == "s":
-                    this_tile = Wall(x, y, f"assets/images/walls/stone.gif", True, self)
-                self.room_wall_group.add(this_tile)
+                    this_tile = Tile(x, y, f"assets/images/walls/stone.gif", True, self)
+                self.room_tile_group.add(this_tile)
                 if this_tile.image is not None:
                     self.room_sprite_group.add(this_tile)
                 this_row.append(this_tile)
@@ -53,12 +53,12 @@ class World:
             self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
 
-    def find_wall(self, row: int, col: int) -> 'Wall':
+    def find_wall(self, row: int, col: int) -> 'Tile':
         """find wall by row & column number
         :param row the row of the wall
         :param col the column of the wall
         :returns wall object at the specified row, col"""
-        for wall in self.room_wall_group:
+        for wall in self.room_tile_group:
             if wall.row == row and wall.col == col:
                 return wall
 
