@@ -10,7 +10,7 @@ SHIFT_Y, SHIFT_X = 1 / 1.8, 1 / 3.7
 # with a collision area between the walls and player that looks good
 
 
-class Wall(pygame.sprite.Sprite):
+class Tile(pygame.sprite.Sprite):
     def __init__(self, x: int, y: int, img: str, collideable: bool, in_room: 'World'):
         """Class for wall tiles
             :param x initial x position
@@ -30,7 +30,7 @@ class Wall(pygame.sprite.Sprite):
         else:
             self.image = None
 
-    def get_neighbors(self) -> ['Wall']:
+    def get_neighbors(self) -> ['Tile']:
         neighbors = []
         maze = self.world.pathfinding_maze
         # north
