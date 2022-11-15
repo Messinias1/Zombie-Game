@@ -1,5 +1,3 @@
-import pygame
-
 """A player's weapon object
 """
 class Weapon:
@@ -10,7 +8,7 @@ class Weapon:
     """
     def __init__(self, textures, stats, sounds) -> None:
         # Spritesheet configuration
-        # self.spritesheet = pygame.image.load(None)
+        self.spritesheet = pygame.image.load(None)
 
         # Sound configuration
         self.sounds = sounds
@@ -37,7 +35,7 @@ class Weapon:
     def shoot_animation(self):
         pass
     # Deals damage (Note: may be the job of the bullet class still considering whether bullets should travel or if shots should be instant)
-    def get_damage(self):
+    def damage(self):
         pass
     # Performs the reloading animation
     def reload_animation(self):
@@ -45,6 +43,3 @@ class Weapon:
     # Displays the gun
     def draw(self):
         pass
-    
-    def get_name(self):
-        return self.name
