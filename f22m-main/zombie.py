@@ -1,23 +1,19 @@
-import math
-
 import pygame
 import constants
 import os
+import math
 
-class Character(pygame.sprite.Sprite):
-    def __init__(self, x, y, images_path, in_room):
-        # """x, y --> the character's starting position
-        #    img --> image for the character sprite
-        #    in_room --> world object where this character is drawn"""
+from wall import Wall
+
+class Zombie(pygame.sprite.Sprite):
+    def __init__(self, x, y, imgpath, in_room):
         super().__init__()
-
         self.animation_list = []
-        # append all the images in the directory to self.images
-        [self.animation_list.append(images_path + "/idle/" + filename) for filename in os.listdir(images_path + "/idle/")]
+        [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
         # I haven't coded anything that makes the animation play
         # I only set the main image to the first file found in the dir
-
+      
         # convert all images
         for i in range(len(self.animation_list)):
             self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
@@ -29,8 +25,6 @@ class Character(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.health = 0
-        self.coins = 0
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -39,7 +33,15 @@ class Character(pygame.sprite.Sprite):
         flipped_image = pygame.transform.flip(self.image, True, False)
         self.image = flipped_image
 
-    def move(self, dx, dy):
+    def move_towards_player(self, player):
+        # Find direction vector (dx, dy) between enemy and player.
+        dx, dy = player.rect.x - self.rect.x, player.rect.y - self.rect.y + 10
+        dist = math.hypot(dx, dy)
+        # If dist becomes 0, the program crashes due to dividing by 0
+        if dist==0:
+            dist = 0.1            
+        dx, dy = dx / dist, dy / dist  # Normalize.
+        # Move along this normalized vector towards the player at current speed.
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
@@ -52,8 +54,8 @@ class Character(pygame.sprite.Sprite):
             self.dir = "left"
             self.flip_char()
         if add_x != 0 and add_y != 0:
-            add_x = add_x * (math.sqrt(2) / 2)
-            add_y = add_y * (math.sqrt(2) / 2)
+            add_x = add_x * 1
+            add_y = add_y * 1
 
         self.xpos += add_x
         self.ypos += add_y
@@ -83,7 +85,6 @@ class Character(pygame.sprite.Sprite):
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list):
             self.frame_index = 0
-
         # take into account camera scroll when setting position
         if camera_ref is None:
             camera_ref = self.world.camera

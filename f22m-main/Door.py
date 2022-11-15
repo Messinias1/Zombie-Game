@@ -19,6 +19,7 @@ class Door(pygame.sprite.Sprite):
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
         self.world = in_room
+
         self.cost = cost
         self.facing_vert = facing_vert
         self.is_open = is_open
