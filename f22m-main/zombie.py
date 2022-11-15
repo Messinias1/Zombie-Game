@@ -45,6 +45,13 @@ class Zombie(pygame.sprite.Sprite):
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
+    def pathfind_towards_char(self, towards_who: 'Character'):
+        # Doesn't work yet, only added as a concept
+
+        # this will rely on world.find_next_move when it works
+        move_x, move_y = self.world.find_next_move(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
+        self.change_x_and_y(move_x, move_y)
+
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
         if self.dir == "left" and add_x < 0:
@@ -68,10 +75,11 @@ class Zombie(pygame.sprite.Sprite):
         walls = self.world.room_wall_group
         move_x, move_y = try_x, try_y
         for wall in walls:
-            if wall.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collisioin going in y direction
-                move_y = 0
-            if wall.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
-                move_x = 0
+            if wall.collideable:
+                if wall.collide_rect.collidepoint(self.rect.x, self.rect.y + try_y):  # collision going in y direction
+                    move_y = 0
+                if wall.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
+                    move_x = 0
 
         return move_x, move_y
 
