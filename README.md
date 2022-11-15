@@ -1,24 +1,9 @@
-# Zombie Game
-Top-down waved based zombie shooter
+# team-template
+Project team template
 
+At some point, you'll need to replace this file to describe your project, how to get it running, and that sort of thing.
 
-## Set-up, Running in IDE
-Download Python https://www.python.org/downloads/
-
-Install pygame https://www.pygame.org/wiki/GettingStarted
-
-**Windows**
-
-run command **py -m pip install -U pygame --user**
-
-If using python 3.11 or newer
-
-run command **py -m pip install -U pygame  --pre --user**
-
-**VScode**
-
-install python extension and choose 3.11 interpreter at the bottom right
-
+Meanwhile, here are some tips to get started.
 
 ## using the repository
 
@@ -42,7 +27,10 @@ Probably all of them!
 
 **README.md** That's this file. Once everyone is set up, replace it with a description of your project. Once your project runs, include instructions for installing and running it!
 
-##Reviewing Code
+# using a framework
+If you're using a framework or IDE that wants to help you get started by creating your project folder, that's okay, but it's going to be a little more difficult to get it set up as the initial state of your project.
+
+It's easiest if the tool your using will do the setup in an existing folder, your cloned project repository. If it won't, you might want me (david_h_brown@uri.edu) to help you in a remote session.
 
 One person should do the setup, starting with ``git checkout -b initial_setup`` in this repository, then do the setup, get it working, commit the changes, and push them. Create a pull request (PR) and request a review.
 
