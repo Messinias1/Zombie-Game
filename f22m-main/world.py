@@ -53,14 +53,14 @@ class World:
             self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
 
-    def find_wall(self, row: int, col: int) -> 'Tile':
+    def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
         """find wall by row & column number
         :param row the row of the wall
         :param col the column of the wall
         :returns wall object at the specified row, col"""
-        for wall in self.room_tile_group:
-            if wall.row == row and wall.col == col:
-                return wall
+        for tile in self.room_tile_group:
+            if tile.row == row and tile.col == col:
+                return tile
 
     def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
         """Finds the best path between two points that avoids all walls in the room

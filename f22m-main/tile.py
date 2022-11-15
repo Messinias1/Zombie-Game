@@ -35,16 +35,16 @@ class Tile(pygame.sprite.Sprite):
         maze = self.world.pathfinding_maze
         # north
         if self.row > 0:
-            neighbors.append(self.world.find_wall(self.row - 1, self.col))
+            neighbors.append(self.world.find_tile_by_row_col(self.row - 1, self.col))
         # south
         if self.row < len(maze) - 1:
-            neighbors.append(self.world.find_wall(self.row + 1, self.col))
+            neighbors.append(self.world.find_tile_by_row_col(self.row + 1, self.col))
         # east
         if self.col < len(maze[self.row]) - 1:
-            neighbors.append(self.world.find_wall(self.row, self.col + 1))
+            neighbors.append(self.world.find_tile_by_row_col(self.row, self.col + 1))
         # west
         if self.col > 0:
-            neighbors.append(self.world.find_wall(self.row, self.col - 1))
+            neighbors.append(self.world.find_tile_by_row_col(self.row, self.col - 1))
         return neighbors
 
     def update(self, camera_ref=None) -> None:
