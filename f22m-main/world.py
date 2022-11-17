@@ -62,7 +62,7 @@ class World:
             if tile.row == row and tile.col == col:
                 return tile
 
-    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
+    def find_next_move(self, start_x: int, start_y: int, end_x, end_y: int) -> (int, int):
         """Finds the best path between two points that avoids all walls in the room
         :param start_x the x position to start at
         :param start_y the y position to start at
