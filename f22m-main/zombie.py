@@ -25,6 +25,7 @@ class Zombie(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
+        self.moves = []
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -61,10 +62,12 @@ class Zombie(pygame.sprite.Sprite):
         # Doesn't work yet, only added as a concept
 
         # this will rely on world.find_next_move when it works
-        move = self.world.find_next_move(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
+        if self.moves == []:
+            self.moves = self.world.find_next_moves(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
+        move = self.moves.pop(0)
         print(self.xpos // 32, self.ypos // 32, move)
         move_x, move_y = move[0] * 32, move[1] * 32
-        #self.xpos, self.ypos = move_x, move_y
+       # self.xpos, self.ypos = move_x, move_y
         self.move_towards_x_y(move_x, move_y)
 
     def change_x_and_y(self, add_x, add_y):
