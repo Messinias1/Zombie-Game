@@ -2,6 +2,7 @@ import pygame
 import json
 from tile import Tile
 from camera import Camera
+from pathfinding import Pathfinding
 
 
 class World:
@@ -22,19 +23,19 @@ class World:
         # this will store each pygame.sprite in the current room (including walls)
         # when everything in a room needs to .update(), this group will be used
         self.room_sprite_group = pygame.sprite.Group()
-        self.pathfinding_maze = []
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
+        self.world_maze = None
 
     def init_room(self) -> None:
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
             layout = json.loads(f.read())
+        self.world_maze = Pathfinding(layout)
         y = 0
         for row in layout:
             x = 0
-            this_row = []
             for char in row:
                 if char == "-":
                     this_tile = Tile(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
@@ -47,10 +48,8 @@ class World:
                 self.room_tile_group.add(this_tile)
                 if this_tile.image is not None:
                     self.room_sprite_group.add(this_tile)
-                this_row.append(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
-            self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
 
     def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
@@ -68,8 +67,17 @@ class World:
         :param start_y the y position to start at
         :param end_x the desired x pos to end at
         :param end_y the y pos to end at
-        :returns a tuple of pixels to move in (move_x, move_y)"""
-        pass
+        :returns a list of tuple of pixels to move in (move_x, move_y)"""
+        start_row, start_col = int(start_x // 32), int(start_y // 32)
+        end_row, end_col = int(end_x // 32), int(end_y // 32)
+        print((start_row, start_col), (end_row, end_col))
+        # all tiles have dimensions 32x32
+        # so using integer division will convert (x, y) to (row, col)
+        path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
+        if len(path) > 1:
+            return path[1]
+        else:
+            return (end_row, end_col)
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
