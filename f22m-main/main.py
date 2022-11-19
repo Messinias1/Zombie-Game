@@ -117,7 +117,10 @@ while run:
 
     # event handler
     handle_input(player)
-    zombie.move_towards_player(player)
+#    zombie.move_towards_player(player)
+    print(zombie.xpos // 32, zombie.ypos // 32)
+    print(player.xpos // 32, player.ypos // 32, "\n")
+    zombie.pathfind_towards_char(player)
 
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
