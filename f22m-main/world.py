@@ -26,7 +26,7 @@ class World:
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
 
-    def init_room(self) -> None:
+    def init_room(self) -> 'World':
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
@@ -52,6 +52,7 @@ class World:
             y += 32
             self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
+        return self
 
     def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
         """find wall by row & column number
@@ -62,7 +63,7 @@ class World:
             if tile.row == row and tile.col == col:
                 return tile
 
-    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
+    def find_next_move(self, start_x: int, start_y: int, end_x, end_y: int) -> (int, int):
         """Finds the best path between two points that avoids all walls in the room
         :param start_x the x position to start at
         :param start_y the y position to start at
