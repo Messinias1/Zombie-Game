@@ -61,7 +61,7 @@ class World:
             if tile.row == row and tile.col == col:
                 return tile
 
-    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
+    def find_next_moves(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
         """Finds the best path between two points that avoids all walls in the room
         :param start_x the x position to start at
         :param start_y the y position to start at
@@ -75,9 +75,13 @@ class World:
         # so using integer division will convert (x, y) to (row, col)
         path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
         if len(path) > 1:
-            return path[1]
+            path.pop(0)  # remove first item because it == start_x, start_y
+            return path
         else:
-            return (end_row, end_col)
+            return [(end_row, end_col)]
+
+    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
+        return self.find_next_moves(start_x, start_y, end_x, end_y)[0]
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
