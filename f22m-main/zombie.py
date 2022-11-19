@@ -45,12 +45,27 @@ class Zombie(pygame.sprite.Sprite):
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
+    def move_towards_x_y(self, x, y):
+        # Find direction vector (dx, dy) between enemy and player.
+        dx, dy = x - self.rect.x, y - self.rect.y - 10
+        dist = math.hypot(dx, dy)
+        # If dist becomes 0, the program crashes due to dividing by 0
+        if dist==0:
+            dist = 0.1
+        dx, dy = dx / dist, dy / dist  # Normalize.
+        # Move along this normalized vector towards the player at current speed.
+        move_x, move_y = self.check_for_collisions(dx, dy)
+        self.change_x_and_y(move_x, move_y)
+
     def pathfind_towards_char(self, towards_who: 'Character'):
         # Doesn't work yet, only added as a concept
 
         # this will rely on world.find_next_move when it works
-        move_x, move_y = self.world.find_next_move(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
-        self.change_x_and_y(move_x, move_y)
+        move = self.world.find_next_move(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
+        print(self.xpos // 32, self.ypos // 32, move)
+        move_x, move_y = move[0] * 32, move[1] * 32
+        #self.xpos, self.ypos = move_x, move_y
+        self.move_towards_x_y(move_x, move_y)
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
