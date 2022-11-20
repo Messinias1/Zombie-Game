@@ -1,9 +1,11 @@
 from multiprocessing.sharedctypes import Value
 from weapon import Weapon
+from item import Item
 
 class Inventory:
     """This Class creates an inventory to store various items and weapons
     """
+    
     def __init__(self)->None:
         """This creates a new Inventory Object with a default pistol
         """
@@ -31,6 +33,7 @@ class Inventory:
         self.gun_list_ = [pistol]
         self.melee_list_ = []
         self.throwable_ = None
+        self.item_list_ = []
 
     def add_gun(self, gun:Weapon)->None:
         """This adds a gun into the gun list
@@ -54,6 +57,14 @@ class Inventory:
                 raise ValueError("This gun is already in the inventory")
         
         self.melee_list_.append(melee)
+        
+    def add_item(self, item:Item)->None:
+        """Adds items to a list
+
+        Args:
+            item (Item): takes in an item
+        """
+        self.melee_list_.append(item)
     
     def get_gun(self, gunName:str)->Weapon:
         """This returns a gun
@@ -83,3 +94,19 @@ class Inventory:
             if meleeWeaponName == meleeWeapon.get_name():
                 return meleeWeapon
             return None
+        
+    def get_item(self, itemName:str)->Item:
+        """Looks for an item the player might have
+
+        Args:
+            itemName (str): takes in the name of an item
+
+        Returns:
+            Item: the found item
+        """
+        # Item class needs a way to look for a name
+        # for item in self.item_list_:
+        #     if itemName == item.get_name():
+        #         return item
+        #     return None
+        pass
