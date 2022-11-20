@@ -1,33 +1,43 @@
 import pygame
 
-class Door:
-    def __init__(self, x: int, y: int, cost: int, facing_vert: bool, is_open: bool) -> None:
+class Door(pygame.sprite.Sprite):
+    def __init__(self, x:int, y:int, img, in_room:int, cost:int, facing_vert:bool, is_open:bool):
+        """Class for wall tiles
+            :param x initial x position
+            :param y initial y position
+            :param img image to load for this wall tile
+            :param in_room the room object that this wall is in
+            :param cost refers to cost of opening the door
+            :param facing_vert used to hold whether door is in vertical or horizontal position on map,
+                i.e. facing_vert = True if the door can be walked through from north to south
+            :param isOpen used to hold whether the door has been opened (use for collision)
         """
-        Constructor
-            x used for x position of the door
-            y used for y position of the door
-            cost used to hold the price of the door
-            facing used to hold whether door is in vertical or horizontal position on map
-            isOpen used to hold whether the door has been opened (use for collision)
-        """
+        super().__init__()
         self.x = x
         self.y = y
+        self.width, self.height = 32, 32
+        self.image = pygame.image.load(img)
+        self.rect = self.image.get_rect()
+        self.world = in_room
+
         self.cost = cost
         self.facing_vert = facing_vert
         self.is_open = is_open
 
-    # Displays pop-up window allowing player to interact with the door
-    def interact(self):
-        pass
-    # Draws the door on the map
-    def draw_door(self):
-        pass
-    # Changes the door state to open
-    def open_door(self):
-        pass
-    # Performs animation when door is opened by player, helper for open_door()
-    def open_animation(self):
-        pass
-    # Performs sound when door is opened by player, helper for open_door()
-    def open_sound(self):
-        pass
+    def update(self, camera_ref = None) -> None:
+        """Overrides pygame's default update method with one that takes camera position into account"""
+        if camera_ref is None:
+            camera_ref = self.world.camera
+        self.rect.x = self.x + camera_ref.x_scroll
+        self.rect.y = self.y + camera_ref.y_scroll
+
+    def buy_door(self) -> None:
+        # Function to open the door, trigger when player tries to buy the door
+        """
+        if player.currency >= self.cost:
+            player.currency = player.currency - self.cost
+            self.isOpen = True
+        """
+            # door open animation
+        else:
+            # print (" Not Enough Coins ")

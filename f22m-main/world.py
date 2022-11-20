@@ -1,7 +1,7 @@
 import pygame
 import json
-import wall
-import camera
+from tile import Tile
+from camera import Camera
 
 
 class World:
@@ -13,11 +13,11 @@ class World:
         To load the map run self.init_room()
 
         :param layout_file The json file where the map desired layout is stored."""
-        self.camera = camera.Camera(100, 100)  # create a new camera & set its initial x and y
+        self.camera = Camera(100, 100)  # create a new camera & set its initial x and y
 
-        # this will store all walls in the current room
+        # this will store all tiles (walls & floor tiles) in the current room
         # when characters handle wall collision, this group will be used
-        self.room_wall_group = pygame.sprite.Group()
+        self.room_tile_group = pygame.sprite.Group()
 
         # this will store each pygame.sprite in the current room (including walls)
         # when everything in a room needs to .update(), this group will be used
@@ -26,11 +26,7 @@ class World:
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
 
-    def init_room(self) -> None:
-        """Set up the room to be drawn by the game"""
-        self.load_room()
-
-    def load_room(self) -> None:
+    def init_room(self) -> 'World':
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
@@ -41,29 +37,39 @@ class World:
             this_row = []
             for char in row:
                 if char == "-":
-                    this_tile = wall.Wall(x, y, wall_type=None, in_room=self)  # img=None signifies this wall is a floor tile
+                    this_tile = Tile(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
                 if char.lower() == "w":
-                    this_tile = wall.Wall(x, y, "wood", self)
+                    this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
-                    this_tile = wall.Wall(x, y, "black", self)
+                    this_tile = Tile(x, y, f"assets/images/walls/black.gif", True, self)
                 if char.lower() == "s":
-                    this_tile = wall.Wall(x, y, "stone", self)
-                if this_tile.wall_type is not None:
-                    self.room_wall_group.add(this_tile)
+                    this_tile = Tile(x, y, f"assets/images/walls/stone.gif", True, self)
+                self.room_tile_group.add(this_tile)
+                if this_tile.image is not None:
                     self.room_sprite_group.add(this_tile)
                 this_row.append(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
             self.pathfinding_maze.append(this_row)
         self.ROOM_DIMENSIONS = [x, y]
+        return self
 
-    def find_path(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
+    def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
+        """find wall by row & column number
+        :param row the row of the wall
+        :param col the column of the wall
+        :returns wall object at the specified row, col"""
+        for tile in self.room_tile_group:
+            if tile.row == row and tile.col == col:
+                return tile
+
+    def find_next_move(self, start_x: int, start_y: int, end_x, end_y: int) -> (int, int):
         """Finds the best path between two points that avoids all walls in the room
         :param start_x the x position to start at
         :param start_y the y position to start at
         :param end_x the desired x pos to end at
         :param end_y the y pos to end at
-        :returns a list of tuples of directions to move in, formatted [(move_x1, move_y1), ...]"""
+        :returns a tuple of pixels to move in (move_x, move_y)"""
         pass
 
     def update_room_sprites(self) -> None:
