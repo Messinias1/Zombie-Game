@@ -35,3 +35,6 @@ class Item(pygame.sprite.Sprite):
             self.use()
             self.picked_up = False
             self.kill()
+            
+    def get_type(self):
+        return self.type
