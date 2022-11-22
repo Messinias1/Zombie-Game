@@ -65,6 +65,12 @@ class World:
             if tile.row == row and tile.col == col:
                 return tile
 
+    def find_tile_by_x_y(self, x: float, y: float) -> Tile:
+        return self.find_tile_by_row_col(int(x // 32) + 1, int(y // 32))
+
+    def find_tile_by_char_pos(self, who: 'Character') -> Tile:
+        return self.find_tile_by_x_y(who.ypos, who.xpos)
+
     def find_next_moves(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
         """Finds the best path between two points that avoids all walls in the room
         :param start_x the x position to start at
@@ -74,15 +80,13 @@ class World:
         :returns a list of tuple of pixels to move in (move_x, move_y)"""
         start_row, start_col = int(start_x // 32), int(start_y // 32)
         end_row, end_col = int(end_x // 32), int(end_y // 32)
-        print((start_row, start_col), (end_row, end_col))
         # all tiles have dimensions 32x32
         # so using integer division will convert (x, y) to (row, col)
-        path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
-        if len(path) > 1:
-            path.pop(0)  # remove first item because it == start_x, start_y
-            return path
-        else:
-            return [(end_row, end_col)]
+        try:
+            path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
+        except IndexError:  # if the end tile is a wall
+            path = [(start_row, start_col)]
+        return path
 
     def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
         return self.find_next_moves(start_x, start_y, end_x, end_y)[0]
