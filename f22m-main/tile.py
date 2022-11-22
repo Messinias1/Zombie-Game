@@ -23,12 +23,9 @@ class Tile(pygame.sprite.Sprite):
         self.collideable = collideable
         self.width, self.height = 32, 32
         self.row, self.col = self.ypos // self.height, self.xpos // self.width
-        if img is not None:
-            self.image = pygame.image.load(img)
-            self.rect = self.image.get_rect()
-            self.collide_rect = self.image.get_rect(height=self.height*RESIZE_HEIGHT, width=self.width*RESIZE_WIDTH)
-        else:
-            self.image = None
+        self.image = pygame.image.load(img)
+        self.rect = self.image.get_rect()
+        self.collide_rect = self.image.get_rect(height=self.height * RESIZE_HEIGHT, width=self.width * RESIZE_WIDTH)
 
     def get_neighbors(self) -> ['Tile']:
         neighbors = []
@@ -47,7 +44,7 @@ class Tile(pygame.sprite.Sprite):
             neighbors.append(self.world.find_tile_by_row_col(self.row, self.col - 1))
         return neighbors
 
-    def update(self, camera_ref=None) -> None:
+    def update(self, camera_ref: 'Camera' = None) -> None:
         """Overrides pygame's default update() method with one that tales camera position into account"""
         if camera_ref is None:
             camera_ref = self.world.camera

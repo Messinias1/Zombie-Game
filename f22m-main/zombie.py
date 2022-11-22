@@ -2,12 +2,13 @@ import pygame
 import constants
 import os
 import math
-
 from tile import Tile
+
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__()
+        in_room.room_sprite_group.add(self)
         self.animation_list = []
         [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
@@ -116,3 +117,4 @@ class Zombie(pygame.sprite.Sprite):
             camera_ref = self.world.camera
         self.rect.x = self.xpos + camera_ref.x_scroll
         self.rect.y = self.ypos + camera_ref.y_scroll
+        

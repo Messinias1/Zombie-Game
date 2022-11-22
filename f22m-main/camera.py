@@ -1,19 +1,19 @@
 import pygame
-import character
+from character import Character
 import constants
 
 
 class Camera:
-    def __init__(self, startx, starty):
+    def __init__(self, startx: int, starty: int):
         self.x_scroll, self.y_scroll = startx, starty
 
-    def x_pan(self, add_x):
+    def x_pan(self, add_x: int):
         self.x_scroll += add_x
 
-    def y_pan(self, add_y):
+    def y_pan(self, add_y: int):
         self.y_scroll += add_y
 
-    def follow_character(self, char):
+    def follow_character(self, char: 'Character'):
         # make the camera follow the given character
         self.x_scroll, self.y_scroll = -char.xpos+(constants.SCREEN_WIDTH/2), -char.ypos+(constants.SCREEN_HEIGHT/2)
         in_room = char.world
