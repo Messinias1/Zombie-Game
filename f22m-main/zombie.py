@@ -26,7 +26,7 @@ class Zombie(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.moves = []
+        self.moves = [self.xpos, self.ypos]
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -47,9 +47,9 @@ class Zombie(pygame.sprite.Sprite):
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
-    def move_towards_x_y(self, x, y):
+    def move_towards_tile(self, tile: 'Tile'):
         # Find direction vector (dx, dy) between enemy and player.
-        dx, dy = x - self.rect.x, y - self.rect.y - 10
+        dx, dy = tile.rect.x - self.rect.x, tile.rect.y - self.rect.y + 10
         dist = math.hypot(dx, dy)
         # If dist becomes 0, the program crashes due to dividing by 0
         if dist==0:
@@ -59,17 +59,20 @@ class Zombie(pygame.sprite.Sprite):
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
-    def pathfind_towards_char(self, towards_who: 'Character'):
-        # Doesn't work yet, only added as a concept
-
-        # this will rely on world.find_next_move when it works
+    def pathfind_towards_char(self, towards_who: 'Character') -> None:
+        dist_to_char = math.dist((towards_who.xpos, towards_who.ypos), (self.xpos, self.ypos))
+        if dist_to_char < 32:
+            # if it's within one tile, we don't need to pathfind
+            self.move_towards_player(towards_who)
+            return None
+        if self.rect.x == self.moves[0] and self.rect.y == self.moves[0]:
+            self.moves.pop(0)
         if self.moves == []:
             self.moves = self.world.find_next_moves(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
-        print(self.xpos // 32, self.ypos // 32, self.moves[0])
-        move_x, move_y = self.moves[0][0] * 32, self.moves[0][1] * 32
+        move_x, move_y = self.moves[0], self.moves[1]
+        t = self.world.find_tile_by_x_y(move_x, move_y)
        # self.xpos, self.ypos = move_x, move_y
-        self.moves.pop(0)
-        self.move_towards_x_y(move_x, move_y)
+        self.move_towards_tile(t)
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
