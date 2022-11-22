@@ -83,10 +83,6 @@ class Pathfinding:
                 if node_position[0] > (len(maze) - 1) or node_position[0] < 0 or node_position[1] > (len(maze[len(maze)-1]) -1) or node_position[1] < 0:
                     continue
 
-                # Make sure walkable terrain
-                if maze[node_position[0]][node_position[1]] != '-':
-                    continue
-
                 # Create new node
                 new_node = Node(current_node, node_position)
 
@@ -115,19 +111,20 @@ class Pathfinding:
                 open_list.append(child)
 
 
-import json
-l = "assets/rooms/layout1.json"
-with open(l, "r") as f:
-    maze = json.loads(f.read())
+if __name__ == "__main__":
+    import json
+    l = "assets/rooms/layout1.json"
+    with open(l, "r") as f:
+        maze = json.loads(f.read())
 
-end = (1, 2)
-for c in range(len(maze)):
-    col = maze[c]
-    for r in range(len(col)):
-        start = (r, c)
-        print("\n", start)
-        path = Pathfinding(maze)
-        try:
-            print(path.astar(start, end))
-        except IndexError:
-            print(False)
+    end = (1, 2)
+    for c in range(len(maze)):
+        col = maze[c]
+        for r in range(len(col)):
+            start = (r, c)
+            print("\n", start)
+            path = Pathfinding(maze)
+            try:
+                print(path.astar(start, end))
+            except IndexError:
+                print(False)
