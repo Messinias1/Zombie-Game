@@ -112,7 +112,7 @@ while run:
     world_room.room_sprite_group.draw(screen)
 
     # create quit button
-    quit_button.implement_button(screen, quit_game)
+    quit_button.implement_button(screen)
 
     # event handler
     handle_input(player)
