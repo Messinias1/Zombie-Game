@@ -42,11 +42,14 @@ class Button:
         Parameters
         ----------
         background_color, display
+
+        Returns
+        ----------
+        True
         """
 
         pg.draw.rect(display, background_color, (self.position_x, self.position_y, self.width, self.height), 0, 4)
         # ADD A VERTICAL LINE FOR SHADOW EFFECT
-        # vertical shadow
         pg.draw.rect(display, self.fillColors['side effect'], ((self.position_x + self.width) - 5, self.position_y + 0.5, 5, self.height), 0, 4)
         # horizontal shadow
         pg.draw.rect(display, self.fillColors['side effect'], (self.position_x + 1, self.position_y + 25, self.width - 4, self.height - 25), 0, 4)
@@ -56,25 +59,7 @@ class Button:
         button_text = self.font.render(self.text, False, '#000000')
         display.blit(button_text, text_position)
 
-    def mouse_is_working(self) -> bool:
-        """
-        Shows mouse is working.
-
-        Returns
-        ----------
-        True
-        """
         return True
-
-    def mouse_is_not_working(self) -> bool:
-        """
-        Shows mouse is not working.
-
-        Returns
-        ----------
-        False
-        """
-        return False
 
     def perform_mouse_click(self, event: pg.event, on_click_function: None, display: pg.surface):
         """
@@ -83,6 +68,10 @@ class Button:
         Parameters
         ----------
         event, on_click_function, display
+
+        Returns
+        ----------
+        True
         """
         # handling the button click and calling the parameter function with the action
         mouse_position_x, mouse_position_y = pg.mouse.get_pos()
@@ -92,12 +81,10 @@ class Button:
         
         if event.type == pg.MOUSEBUTTONDOWN and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             self.draw_button(self.fillColors['pressed'], display)
-            return self.mouse_is_working
         elif event.type == pg.MOUSEBUTTONUP and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             on_click_function()
-            return self.mouse_is_working
-        else:
-            return self.mouse_is_not_working
+
+        return True
 
     def perform_mouse_hover(self, display) -> bool:
         """
@@ -109,28 +96,25 @@ class Button:
 
         Returns
         ----------
-        True if the hovering effect is working or False if the hovering effect is not working
+        True
         """
         mouse_position_x, mouse_position_y = pg.mouse.get_pos()
 
         # if mouse is within the button, change color to the darker hue
         if mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             self.draw_button(self.fillColors['hover'], display)
-            return self.mouse_is_working()
-        else:
-            return self.mouse_is_not_working()
 
+        return True
 
-    def implement_button(self, display, on_click_function: None) -> None:
+    def implement_button(self, display) -> None:
         """
-        Implements the button onto the screen so it can be displayed and clicked.
+        Implements the button onto the screen so it can be displayed.
 
         Parameters
         ----------
-        display, on_click_function
+        display
         """
         self.draw_button(self.fillColors['normal'], display)
-        # self.perform_mouse_click(on_click_function, display)
         self.perform_mouse_hover(display)
         
 
