@@ -62,6 +62,7 @@ class World:
         for tile in self.room_tile_group:
             if tile.row == row and tile.col == col:
                 return tile
+        raise IndexError  # no tile found
 
     def find_tile_by_x_y(self, x: float, y: float) -> Tile:
         return self.find_tile_by_row_col(int(x // 32) + 1, int(y // 32))
