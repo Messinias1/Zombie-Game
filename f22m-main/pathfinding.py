@@ -20,6 +20,9 @@ class Node:
 
 
 class PathfindingWorld(World):
+    """This is a child of the World class
+    when you want to create a world object that uses pathfinding
+    you'll need to create it thru PathfindingWorld() instead of World()"""
     def __init__(self, layout):
         super().__init__(layout)
 
