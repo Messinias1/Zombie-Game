@@ -50,7 +50,6 @@ class Button:
 
         pg.draw.rect(display, background_color, (self.position_x, self.position_y, self.width, self.height), 0, 4)
         # ADD A VERTICAL LINE FOR SHADOW EFFECT
-        # vertical shadow
         pg.draw.rect(display, self.fillColors['side effect'], ((self.position_x + self.width) - 5, self.position_y + 0.5, 5, self.height), 0, 4)
         # horizontal shadow
         pg.draw.rect(display, self.fillColors['side effect'], (self.position_x + 1, self.position_y + 25, self.width - 4, self.height - 25), 0, 4)
