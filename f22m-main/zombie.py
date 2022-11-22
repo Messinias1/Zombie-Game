@@ -65,14 +65,9 @@ class Zombie(pygame.sprite.Sprite):
             # if it's within one tile, we don't need to pathfind
             self.move_towards_player(towards_who)
             return None
-        if self.rect.x == self.moves[0] and self.rect.y == self.moves[0]:
-            self.moves.pop(0)
-        if self.moves == []:
-            self.moves = self.world.find_next_moves(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
-        move_x, move_y = self.moves[0], self.moves[1]
-        t = self.world.find_tile_by_x_y(move_x, move_y)
-       # self.xpos, self.ypos = move_x, move_y
-        self.move_towards_tile(t)
+
+        path = self.world.find_moves_towards(self, towards_who)
+        print(path)
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
