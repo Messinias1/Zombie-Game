@@ -78,14 +78,15 @@ class World:
         :param end_x the desired x pos to end at
         :param end_y the y pos to end at
         :returns a list of tuple of pixels to move in (move_x, move_y)"""
-        start_row, start_col = int(start_x // 32), int(start_y // 32)
-        end_row, end_col = int(end_x // 32), int(end_y // 32)
+        start_row, start_col = int(start_x // 32) + 1, int(start_y // 32)
+        end_row, end_col = int(end_x // 32) + 1, int(end_y // 32)
         # all tiles have dimensions 32x32
         # so using integer division will convert (x, y) to (row, col)
         try:
             path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
-        except IndexError:  # if the end tile is a wall
-            path = [(start_row, start_col)]
+        except IndexError:  # if the end or start tile is a wall
+            path = [(start_row, start_col)]  # stay at the starting pos
+        print(path)
         return path
 
     def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
