@@ -1,13 +1,17 @@
 class Node():
     """A node class for A* Pathfinding"""
 
-    def __init__(self, parent=None, position=None):
+    def __init__(self, parent=None, position=None, maze=None):
         self.parent = parent
         self.position = position
 
         self.g = 0
         self.h = 0
         self.f = 0
+        try:
+            self.val = maze[self.position[0]][self.position[1]]
+        except:
+            self.val = None
 
     def __eq__(self, other):
         return self.position == other.position
@@ -27,9 +31,13 @@ class Pathfinding:
             maze[i] = list(maze[i])
 
         # Create start and end node
-        start_node = Node(None, start)
+        start_node = Node(None, start, maze)
+        print(start_node.val)
         start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, end)
+        end_node = Node(None, end, maze)
+        print(end_node.val)
+        if end_node.val != "-" or start_node.val != "-":
+            raise IndexError  # the end or start node is a wall
         end_node.g = end_node.h = end_node.f = 0
 
         # Initialize both open and closed list
@@ -44,6 +52,7 @@ class Pathfinding:
 
             # Get the current node
             current_node = open_list[0]
+            #print(current_node.position)
             current_index = 0
             for index, item in enumerate(open_list):
                 if item.f < current_node.f:
@@ -106,3 +115,19 @@ class Pathfinding:
                 open_list.append(child)
 
 
+import json
+l = "assets/rooms/layout1.json"
+with open(l, "r") as f:
+    maze = json.loads(f.read())
+
+end = (1, 2)
+for c in range(len(maze)):
+    col = maze[c]
+    for r in range(len(col)):
+        start = (r, c)
+        print("\n", start)
+        path = Pathfinding(maze)
+        try:
+            print(path.astar(start, end))
+        except IndexError:
+            print(False)
