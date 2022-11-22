@@ -5,7 +5,7 @@ import math
 from item import Item
 from character import Character
 from zombie import Zombie
-from world import World
+from pathfinding import PathfindingWorld
 from button import Button
 
 def handle_input(player):
@@ -46,7 +46,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = World("assets/rooms/layout1.json").init_room()
+world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
@@ -110,11 +110,10 @@ while run:
 
     # event handler
     handle_input(player)
-#    zombie.move_towards_player(player)
-    print(zombie.xpos // 32, zombie.ypos // 32)
-    print(player.xpos // 32, player.ypos // 32, "\n")
     zombie.pathfind_towards_char(player)
-
+    #t = world_room.find_tile_by_char_pos(player)
+    #zombie.move_towards_tile(t)
+    #zombie.move_towards_player(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
