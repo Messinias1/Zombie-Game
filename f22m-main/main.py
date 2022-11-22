@@ -73,13 +73,7 @@ item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world
 
 #Create Sprite Groups:
 item_sprites = pygame.sprite.Group()
-
-#Add sprites to respective sprite groups here so that they can be drawn:
-world_room.room_sprite_group.add(player)
-world_room.room_sprite_group.add(zombie)
-
 for item in item_list:
-    world_room.room_sprite_group.add(item)
     item_sprites.add(item)
 
 # main game loop

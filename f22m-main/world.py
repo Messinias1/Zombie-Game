@@ -36,8 +36,7 @@ class World:
             x = 0
             this_row = []
             for char in row:
-                if char == "-":
-                    this_tile = Tile(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
+                this_tile = Tile(x, y, f"assets/images/walls/blank.gif", False, self)   # default is blank tile
                 if char.lower() == "w":
                     this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
