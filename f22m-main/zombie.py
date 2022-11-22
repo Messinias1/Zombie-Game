@@ -65,10 +65,10 @@ class Zombie(pygame.sprite.Sprite):
         # this will rely on world.find_next_move when it works
         if self.moves == []:
             self.moves = self.world.find_next_moves(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
-        move = self.moves.pop(0)
-        print(self.xpos // 32, self.ypos // 32, move)
-        move_x, move_y = move[0] * 32, move[1] * 32
+        print(self.xpos // 32, self.ypos // 32, self.moves[0])
+        move_x, move_y = self.moves[0][0] * 32, self.moves[0][1] * 32
        # self.xpos, self.ypos = move_x, move_y
+        self.moves.pop(0)
         self.move_towards_x_y(move_x, move_y)
 
     def change_x_and_y(self, add_x, add_y):
