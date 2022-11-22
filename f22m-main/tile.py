@@ -23,12 +23,9 @@ class Tile(pygame.sprite.Sprite):
         self.collideable = collideable
         self.width, self.height = 32, 32
         self.row, self.col = self.ypos // self.height, self.xpos // self.width
-        if img is not None:
-            self.image = pygame.image.load(img)
-            self.rect = self.image.get_rect()
-            self.collide_rect = self.image.get_rect(height=self.height*RESIZE_HEIGHT, width=self.width*RESIZE_WIDTH)
-        else:
-            self.image = None
+        self.image = pygame.image.load(img)
+        self.rect = self.image.get_rect()
+        self.collide_rect = self.image.get_rect(height=self.height * RESIZE_HEIGHT, width=self.width * RESIZE_WIDTH)
 
     def get_neighbors(self) -> ['Tile']:
         neighbors = []
