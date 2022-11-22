@@ -26,7 +26,6 @@ class Zombie(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.moves = [self.xpos, self.ypos]
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -68,6 +67,7 @@ class Zombie(pygame.sprite.Sprite):
 
         path = self.world.find_moves_towards(self, towards_who)
         print(path)
+        #self.move_towards_tile(self.world.find_tile_by_row_col(path[0][0], path[0][1]))
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
