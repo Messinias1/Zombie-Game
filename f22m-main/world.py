@@ -2,7 +2,6 @@ import pygame
 import json
 from tile import Tile
 from camera import Camera
-from pathfinding import Pathfinding
 
 
 class World:
@@ -26,16 +25,15 @@ class World:
         self.pathfinding_maze = []
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
-        self.world_maze = None
+        self._layout_json = None
 
     def init_room(self) -> 'World':
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
-            layout = json.loads(f.read())
+            self._layout_json = json.loads(f.read())
         y = 0
-        self.world_maze = Pathfinding(layout)
-        for row in layout:
+        for row in self._layout_json:
             x = 0
             this_row = []
             for char in row:
@@ -70,27 +68,6 @@ class World:
 
     def find_tile_by_char_pos(self, who: 'Character') -> Tile:
         return self.find_tile_by_x_y(who.ypos, who.xpos)
-
-    def find_next_moves(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
-        """Finds the best path between two points that avoids all walls in the room
-        :param start_x the x position to start at
-        :param start_y the y position to start at
-        :param end_x the desired x pos to end at
-        :param end_y the y pos to end at
-        :returns a list of tuple of pixels to move in (move_x, move_y)"""
-        start_row, start_col = int(start_x // 32) + 1, int(start_y // 32)
-        end_row, end_col = int(end_x // 32) + 1, int(end_y // 32)
-        # all tiles have dimensions 32x32
-        # so using integer division will convert (x, y) to (row, col)
-        try:
-            path = self.world_maze.astar((start_row, start_col), (end_row, end_col))
-        except IndexError:  # if the end or start tile is a wall
-            path = [(start_row, start_col)]  # stay at the starting pos
-        print(path)
-        return path
-
-    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
-        return self.find_next_moves(start_x, start_y, end_x, end_y)[0]
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
