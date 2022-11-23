@@ -34,23 +34,23 @@ class Tile(pygame.sprite.Sprite):
             hxw = (32, 32)
         x, y = xy[0], xy[1]
         width, height = hxw[0], hxw[1]
-        return int(x // width) + 1, int(y // height)
+        return int(x // width), int(y // height)
 
     def get_neighbors(self) -> ['Tile']:
         neighbors = []
         maze = self._world.pathfinding_maze
         # north
         if self.row > 0:
-            neighbors.append(self._world.find_tile_by_row_col(self.row - 1, self.col))
+            neighbors.append(self._world.find_tile_by_row_col((self.row - 1, self.col)))
         # south
         if self.row < len(maze) - 1:
-            neighbors.append(self._world.find_tile_by_row_col(self.row + 1, self.col))
+            neighbors.append(self._world.find_tile_by_row_col((self.row + 1, self.col)))
         # east
         if self.col < len(maze[self.row]) - 1:
-            neighbors.append(self._world.find_tile_by_row_col(self.row, self.col + 1))
+            neighbors.append(self._world.find_tile_by_row_col((self.row, self.col + 1)))
         # west
         if self.col > 0:
-            neighbors.append(self._world.find_tile_by_row_col(self.row, self.col - 1))
+            neighbors.append(self._world.find_tile_by_row_col((self.row, self.col - 1)))
         return neighbors
 
     def update(self) -> None:

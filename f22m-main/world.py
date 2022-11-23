@@ -25,6 +25,7 @@ class World:
         self.pathfinding_maze = []
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
+        self.maze = None
         self._layout_json = None
 
     def init_room(self) -> 'World':
@@ -32,6 +33,7 @@ class World:
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
             self._layout_json = json.loads(f.read())
+        self.maze = self._layout_json
         y = 0
         for row in self._layout_json:
             x = 0

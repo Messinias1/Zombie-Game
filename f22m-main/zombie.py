@@ -55,19 +55,20 @@ class Zombie(pygame.sprite.Sprite):
             dist = 0.1
         dx, dy = dx / dist, dy / dist  # Normalize.
         # Move along this normalized vector towards the player at current speed.
-        move_x, move_y = self.check_for_collisions(dx, dy)
-        self.change_x_and_y(move_x, move_y)
+        self.change_x_and_y(dx, dy)
 
     def pathfind_towards_char(self, towards_who: 'Character') -> None:
-        dist_to_char = math.dist((towards_who.xpos, towards_who.ypos), (self.xpos, self.ypos))
-        if dist_to_char < 32:
+        if self.dist_to_char(towards_who) < 46:
             # if it's within one tile, we don't need to pathfind
             self.move_towards_player(towards_who)
             return None
 
-        path = self.world.find_moves_towards(self, towards_who)
-        print(path)
-        #self.move_towards_tile(self.world.find_tile_by_row_col(path[0][0], path[0][1]))
+        path = self.world.find_next_move_towards(self, towards_who)
+        t = self.world.find_tile_by_row_col(path)
+        self.move_towards_tile(t)
+
+    def dist_to_char(self, towards_who):
+        return math.dist((towards_who.xpos, towards_who.ypos), (self.xpos, self.ypos))
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement

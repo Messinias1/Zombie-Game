@@ -111,9 +111,6 @@ while run:
     # event handler
     handle_input(player)
     zombie.pathfind_towards_char(player)
-    #t = world_room.find_tile_by_char_pos(player)
-    #zombie.move_towards_tile(t)
-    #zombie.move_towards_player(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 

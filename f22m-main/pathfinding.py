@@ -1,19 +1,16 @@
 from world import World
+from tile import Tile
 
 
 class Node:
     """A node class for A* Pathfinding"""
 
-    def __init__(self, parent=None, position=None, maze=None):
+    def __init__(self, parent=None, position=None):
         self.parent = parent
         self.position = position
         self.g = 0
         self.h = 0
         self.f = 0
-        try:
-            self.val = maze[self.position[0]][self.position[1]]
-        except:
-            self.val = None
 
     def __eq__(self, other):
         return self.position == other.position
@@ -26,45 +23,49 @@ class PathfindingWorld(World):
     def __init__(self, layout):
         super().__init__(layout)
 
-    def find_next_moves(self, start_x, start_y, end_x, end_y) -> [(int, int)]:
+    def rowcol_to_mazeval(self, rowcol: (int, int)) -> str:
+        """:param rowcol the requested (row, column)
+        :return the string value stored in the layout file at rowcol"""
+        return self.maze[rowcol[1]][rowcol[0]]
+
+    def get_node_val(self, node: Node) -> str:
+        return self.rowcol_to_mazeval(node.position)
+
+    def find_next_moves(self, start_xy, end_xy) -> [(int, int)]:
         """Finds the best path between two points that avoids all walls in the room
-        :param start_x the x position to start at
-        :param start_y the y position to start at
-        :param end_x the desired x pos to end at
-        :param end_y the y pos to end at
+        :param start_xy the (x, y) to start at
+        :param end_xy the (x, y) to end at
         :returns a list of tuple of pixels to move in (move_x, move_y)"""
-        start_row, start_col = int(start_x // 32) + 1, int(start_y // 32)
-        end_row, end_col = int(end_x // 32) + 1, int(end_y // 32)
-        # all tiles have dimensions 32x32
-        # so using integer division will convert (x, y) to (row, col)
+        start_pos = Tile.xy_to_rowcol(start_xy)
+        end_pos = Tile.xy_to_rowcol(end_xy)
         try:
-            path = self.astar((start_row, start_col), (end_row, end_col))
+            path = self.astar(start_pos, end_pos)
+            path.pop(0)
         except IndexError:  # if the end or start tile is a wall
-            path = [(start_row, start_col)]  # stay at the starting pos
+            path = [start_pos]  # stay at the starting pos
         return path
 
-    def find_next_move(self, start_x, start_y, end_x, end_y) -> (int, int):
-        return self.find_next_moves(start_x, start_y, end_x, end_y)[0]
+    def find_next_move(self, start_xy: (int, int), end_xy: (int, int)) -> (int, int):
+        return self.find_next_moves((start_xy[0], start_xy[1]), (end_xy[0], end_xy[1]))[0]
 
-    def find_moves_towards(self, source: 'Character', target: 'Character') -> [(int, int)]:
+    def find_next_move_towards(self, source: 'Character', target: 'Character') -> [(int, int)]:
         """Same as 'find_next_moves' but you can input two characters instead of x y positions
         :param source the character that will move
         :param target the character to move towards"""
-        return self.find_next_moves(source.xpos, source.ypos, target.xpos, target.ypos)
+        return self.find_next_move((source.xpos, source.ypos), (target.xpos, target.ypos))
 
     def astar(self, start, end):
-        """Returns a list of tuples as a path from the given start to the given end in the given maze"""
-        maze = self._layout_json
-        for i in range(len(maze)):
+        """Returns a list of tuples as a path from the given start to the given end in the given self.maze"""
+        for i in range(len(self.maze)):
             # convert the ["ssssssss", "------"] format of the json file
             # into [["s", "s", ...], ["-", "-", ...]
-            maze[i] = list(maze[i])
+            self.maze[i] = list(self.maze[i])
 
         # Create start and end node
-        start_node = Node(None, start, maze)
+        start_node = Node(None, start)
         start_node.g = start_node.h = start_node.f = 0
-        end_node = Node(None, end, maze)
-        if end_node.val != "-" or start_node.val != "-":
+        end_node = Node(None, end)
+        if self.get_node_val(end_node) != "-" or self.get_node_val(start_node) != "-":
             raise IndexError  # the end or start node is a wall
         end_node.g = end_node.h = end_node.f = 0
 
@@ -102,7 +103,7 @@ class PathfindingWorld(World):
 
             # Generate children
             children = []
-            cur_tile = self.find_tile_by_row_col(current_node.position[0], current_node.position[1])
+            cur_tile = self.find_tile_by_row_col(current_node.position)
             neighbors = cur_tile.get_neighbors()
             for cur_neigh in neighbors:  # Adjacent squares
                 # Get node position
@@ -145,16 +146,3 @@ class PathfindingWorld(World):
                 open_list.append(child)
 
 
-if __name__ == "__main__":
-    finder = PathfindingWorld("assets/rooms/layout1.json").init_room()
-    end = (1, 2)
-    maze = finder._layout_json
-    for c in range(len(maze)):
-        col = maze[c]
-        for r in range(len(col)):
-            start = (r, c)
-            print("\n", start)
-            try:
-                print(finder.astar(start, end))
-            except IndexError:
-                print(False)
