@@ -22,18 +22,18 @@ class Tile(pygame.sprite.Sprite):
         self._world = in_room
         self.collideable = collideable
         self._width, self._height = 32, 32
-        self.row, self.col = self.xy_to_rowcol(self.xpos, self.ypos, self._width, self._height)
+        self.row, self.col = self.xy_to_rowcol((self.xpos, self.ypos), (self._width, self._height))
         self.position = (self.row, self.col)
         self.image = pygame.image.load(img)
         self.rect = self.image.get_rect()
         self.collide_rect = self.image.get_rect(height=self._height * RESIZE_HEIGHT, width=self._width * RESIZE_WIDTH)
 
     @staticmethod
-    def xy_to_rowcol(x=None, y=None, width=None, height=None) -> (int, int):
-        if width is None:
-            width = 32
-        if height is None:
-            height = 32
+    def xy_to_rowcol(xy: (int, int), hxw: (int, int) = None) -> (int, int):
+        if hxw is None:
+            hxw = (32, 32)
+        x, y = xy[0], xy[1]
+        width, height = hxw[0], hxw[1]
         return int(x // width) + 1, int(y // height)
 
     def get_neighbors(self) -> ['Tile']:

@@ -53,22 +53,20 @@ class World:
         self.ROOM_DIMENSIONS = [x, y]
         return self
 
-    def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
+    def find_tile_by_row_col(self, row_col: (int, int)) -> 'Tile':
         """find wall by row & column number
-        :param row the row of the wall
-        :param col the column of the wall
+        :param row_col the (row, column) of the wall
         :returns wall object at the specified row, col"""
         for tile in self.room_tile_group:
-            if tile.row == row and tile.col == col:
+            if tile.position == row_col:
                 return tile
         raise IndexError  # no tile found
 
-    def find_tile_by_x_y(self, x: float, y: float) -> Tile:
-        rowcol = Tile.xy_to_rowcol(x, y, 32, 32)
-        return self.find_tile_by_row_col(rowcol[0], rowcol[1])
+    def find_tile_by_x_y(self, x_y: (int, int)) -> Tile:
+        return self.find_tile_by_row_col(Tile.xy_to_rowcol(x_y))
 
     def find_tile_by_char_pos(self, who: 'Character') -> Tile:
-        return self.find_tile_by_x_y(who.xpos, who.ypos)
+        return self.find_tile_by_x_y((who.xpos, who.ypos))
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""
