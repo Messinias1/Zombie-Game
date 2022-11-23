@@ -45,8 +45,7 @@ class World:
                 if char.lower() == "s":
                     this_tile = Tile(x, y, f"assets/images/walls/stone.gif", True, self)
                 self.room_tile_group.add(this_tile)
-                if this_tile.image is not None:
-                    self.room_sprite_group.add(this_tile)
+                self.room_sprite_group.add(this_tile)
                 this_row.append(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
@@ -65,10 +64,11 @@ class World:
         raise IndexError  # no tile found
 
     def find_tile_by_x_y(self, x: float, y: float) -> Tile:
-        return self.find_tile_by_row_col(int(x // 32) + 1, int(y // 32))
+        rowcol = Tile.xy_to_rowcol(x, y, 32, 32)
+        return self.find_tile_by_row_col(rowcol[0], rowcol[1])
 
     def find_tile_by_char_pos(self, who: 'Character') -> Tile:
-        return self.find_tile_by_x_y(who.ypos, who.xpos)
+        return self.find_tile_by_x_y(who.xpos, who.ypos)
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""

@@ -58,7 +58,7 @@ class Character(pygame.sprite.Sprite):
         self.xpos += add_x
         self.ypos += add_y
 
-    def check_for_collisions(self, try_x=None, try_y=None):
+    def check_for_collisions(self, try_x=None, try_y=None) -> (int, int):
         if try_x is None:
             try_x = 0
         if try_y is None:
@@ -74,7 +74,7 @@ class Character(pygame.sprite.Sprite):
 
         return move_x, move_y
 
-    def update(self, camera_ref=None):
+    def update(self):
         animation_cooldown = 70
         self.image = self.animation_list[self.frame_index]
         if self.dir == "right":
@@ -84,9 +84,7 @@ class Character(pygame.sprite.Sprite):
             self.update_time = pygame.time.get_ticks()
         if self.frame_index >= len(self.animation_list):
             self.frame_index = 0
-
         # take into account camera scroll when setting position
-        if camera_ref is None:
-            camera_ref = self.world.camera
+        camera_ref = self.world.camera
         self.rect.x = self.xpos + camera_ref.x_scroll
         self.rect.y = self.ypos + camera_ref.y_scroll
