@@ -5,7 +5,7 @@ import math
 from item import Item
 from character import Character
 from zombie import Zombie
-from world import World
+from pathfinding import PathfindingWorld
 from button import Button
 
 def handle_input(player):
@@ -46,7 +46,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = World("assets/rooms/layout1.json").init_room()
+world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
@@ -73,13 +73,7 @@ item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world
 
 #Create Sprite Groups:
 item_sprites = pygame.sprite.Group()
-
-#Add sprites to respective sprite groups here so that they can be drawn:
-world_room.room_sprite_group.add(player)
-world_room.room_sprite_group.add(zombie)
-
 for item in item_list:
-    world_room.room_sprite_group.add(item)
     item_sprites.add(item)
 
 # main game loop
@@ -112,12 +106,11 @@ while run:
     world_room.room_sprite_group.draw(screen)
 
     # create quit button
-    quit_button.implement_button(screen, quit_game)
+    quit_button.implement_button(screen)
 
     # event handler
     handle_input(player)
-    zombie.move_towards_player(player)
-
+    zombie.pathfind_towards_char(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 

@@ -25,19 +25,21 @@ class World:
         self.pathfinding_maze = []
         self.ROOM_DIMENSIONS = [0, 0]
         self._layout_file = layout_file
+        self.maze = None
+        self._layout_json = None
 
     def init_room(self) -> 'World':
         """Prepares the map and stores it in self.room_sprites & self.room_sprite_group
            & initiates pathfinding for the room as well"""
         with open(self._layout_file, "r") as f:
-            layout = json.loads(f.read())
+            self._layout_json = json.loads(f.read())
+        self.maze = self._layout_json
         y = 0
-        for row in layout:
+        for row in self._layout_json:
             x = 0
             this_row = []
             for char in row:
-                if char == "-":
-                    this_tile = Tile(x, y, img=None, collideable=False, in_room=self)  # img=None signifies this wall is a floor tile
+                this_tile = Tile(x, y, f"assets/images/walls/blank.gif", False, self)   # default is blank tile
                 if char.lower() == "w":
                     this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
@@ -45,8 +47,7 @@ class World:
                 if char.lower() == "s":
                     this_tile = Tile(x, y, f"assets/images/walls/stone.gif", True, self)
                 self.room_tile_group.add(this_tile)
-                if this_tile.image is not None:
-                    self.room_sprite_group.add(this_tile)
+                self.room_sprite_group.add(this_tile)
                 this_row.append(this_tile)
                 x += 32  # each wall sprite is 32x32 pixels
             y += 32
@@ -54,23 +55,20 @@ class World:
         self.ROOM_DIMENSIONS = [x, y]
         return self
 
-    def find_tile_by_row_col(self, row: int, col: int) -> 'Tile':
+    def find_tile_by_row_col(self, row_col: (int, int)) -> 'Tile':
         """find wall by row & column number
-        :param row the row of the wall
-        :param col the column of the wall
+        :param row_col the (row, column) of the wall
         :returns wall object at the specified row, col"""
         for tile in self.room_tile_group:
-            if tile.row == row and tile.col == col:
+            if tile.position == row_col:
                 return tile
+        raise IndexError  # no tile found
 
-    def find_next_move(self, start_x: int, start_y: int, end_x, end_y: int) -> (int, int):
-        """Finds the best path between two points that avoids all walls in the room
-        :param start_x the x position to start at
-        :param start_y the y position to start at
-        :param end_x the desired x pos to end at
-        :param end_y the y pos to end at
-        :returns a tuple of pixels to move in (move_x, move_y)"""
-        pass
+    def find_tile_by_x_y(self, x_y: (int, int)) -> Tile:
+        return self.find_tile_by_row_col(Tile.xy_to_rowcol(x_y))
+
+    def find_tile_by_char_pos(self, who: 'Character') -> Tile:
+        return self.find_tile_by_x_y((who.xpos, who.ypos))
 
     def update_room_sprites(self) -> None:
         """Runs the update() method for each sprite stored in self.room_sprite_group"""

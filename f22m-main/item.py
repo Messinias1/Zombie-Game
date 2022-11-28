@@ -1,8 +1,10 @@
 import pygame
 
+
 class Item(pygame.sprite.Sprite):
     def __init__(self, x, y, img, strength, type, in_room, player):
         super().__init__()
+        in_room.room_sprite_group.add(self)
         self.xpos = x
         self.ypos = y
 
@@ -35,3 +37,6 @@ class Item(pygame.sprite.Sprite):
             self.use()
             self.picked_up = False
             self.kill()
+            
+    def get_type(self):
+        return self.type

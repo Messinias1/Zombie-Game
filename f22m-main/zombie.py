@@ -2,12 +2,13 @@ import pygame
 import constants
 import os
 import math
-
 from tile import Tile
+
 
 class Zombie(pygame.sprite.Sprite):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__()
+        in_room.room_sprite_group.add(self)
         self.animation_list = []
         [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
         # the image path dir will have multiple images, where each one is a frame in the character's animation
@@ -45,12 +46,29 @@ class Zombie(pygame.sprite.Sprite):
         move_x, move_y = self.check_for_collisions(dx, dy)
         self.change_x_and_y(move_x, move_y)
 
-    def pathfind_towards_char(self, towards_who: 'Character'):
-        # Doesn't work yet, only added as a concept
+    def move_towards_tile(self, tile: 'Tile'):
+        # Find direction vector (dx, dy) between enemy and player.
+        dx, dy = tile.rect.x - self.rect.x, tile.rect.y - self.rect.y + 10
+        dist = math.hypot(dx, dy)
+        # If dist becomes 0, the program crashes due to dividing by 0
+        if dist==0:
+            dist = 0.1
+        dx, dy = dx / dist, dy / dist  # Normalize.
+        # Move along this normalized vector towards the player at current speed.
+        self.change_x_and_y(dx, dy)
 
-        # this will rely on world.find_next_move when it works
-        move_x, move_y = self.world.find_next_move(self.xpos, self.ypos, towards_who.xpos, towards_who.ypos)
-        self.change_x_and_y(move_x, move_y)
+    def pathfind_towards_char(self, towards_who: 'Character') -> None:
+        if self.dist_to_char(towards_who) < 46:
+            # if it's within one tile, we don't need to pathfind
+            self.move_towards_player(towards_who)
+            return None
+
+        path = self.world.find_next_move_towards(self, towards_who)
+        t = self.world.find_tile_by_row_col(path)
+        self.move_towards_tile(t)
+
+    def dist_to_char(self, towards_who):
+        return math.dist((towards_who.xpos, towards_who.ypos), (self.xpos, self.ypos))
 
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
@@ -98,3 +116,4 @@ class Zombie(pygame.sprite.Sprite):
             camera_ref = self.world.camera
         self.rect.x = self.xpos + camera_ref.x_scroll
         self.rect.y = self.ypos + camera_ref.y_scroll
+        
