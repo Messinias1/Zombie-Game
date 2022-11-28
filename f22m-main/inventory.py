@@ -1,4 +1,3 @@
-from multiprocessing.sharedctypes import Value
 from weapon import Weapon
 from item import Item
 
