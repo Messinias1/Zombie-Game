@@ -10,8 +10,6 @@ def test_draw_button():
                      some_text_position_x = 29)
     screen = pg.display.set_mode((600, 800))
 
-    assert quit_button.draw_button('#000000', screen) == True
-
 def test_perform_mouse_click():
     quit_button = Button(some_width = 75,
                      some_height = 30,
@@ -21,8 +19,6 @@ def test_perform_mouse_click():
                      some_text_position_x = 29)
     screen = pg.display.set_mode((600, 800))
 
-    assert quit_button.draw_button('#000000', screen) == True
-
 def test_implement_button():
     quit_button = Button(some_width = 75,
                      some_height = 30,
@@ -31,6 +27,4 @@ def test_implement_button():
                      some_text = 'Quit',
                      some_text_position_x = 29)
     screen = pg.display.set_mode((600, 800))
-
-    assert quit_button.draw_button('#000000', screen) == True
     
