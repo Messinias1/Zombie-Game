@@ -5,6 +5,7 @@ import math
 from item import Item
 from character import Character
 from zombie import Zombie
+from zombie import Small_Zombie
 from pathfinding import PathfindingWorld
 from button import Button
 
@@ -49,7 +50,8 @@ pygame.display.set_caption("Zombie Game")
 world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
-zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
+zombie1 = Small_Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
+zombie2 = Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room)
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -110,7 +112,8 @@ while run:
 
     # event handler
     handle_input(player)
-    zombie.pathfind_towards_char(player)
+    zombie1.pathfind_towards_char(player)
+    zombie2.pathfind_towards_char(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 

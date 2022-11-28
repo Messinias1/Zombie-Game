@@ -26,6 +26,8 @@ class Zombie(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
+        self.speed = 2
+        self.damage = 5
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -43,7 +45,7 @@ class Zombie(pygame.sprite.Sprite):
             dist = 0.1            
         dx, dy = dx / dist, dy / dist  # Normalize.
         # Move along this normalized vector towards the player at current speed.
-        move_x, move_y = self.check_for_collisions(dx, dy)
+        move_x, move_y = self.check_for_collisions(player, dx, dy)
         self.change_x_and_y(move_x, move_y)
 
     def move_towards_tile(self, tile: 'Tile'):
@@ -79,13 +81,13 @@ class Zombie(pygame.sprite.Sprite):
             self.dir = "left"
             self.flip_char()
         if add_x != 0 and add_y != 0:
-            add_x = add_x * 1
-            add_y = add_y * 1
+            add_x = add_x * self.speed
+            add_y = add_y * self.speed
 
         self.xpos += add_x
         self.ypos += add_y
 
-    def check_for_collisions(self, try_x=None, try_y=None):
+    def check_for_collisions(self,player, try_x=None, try_y=None):
         if try_x is None:
             try_x = 0
         if try_y is None:
@@ -98,6 +100,10 @@ class Zombie(pygame.sprite.Sprite):
                     move_y = 0
                 if tile.collide_rect.collidepoint(self.rect.x + try_x, self.rect.y):  # collision going in x direction
                     move_x = 0
+
+        if self.rect.colliderect(player.rect):
+            player.health -= self.damage
+            
 
         return move_x, move_y
 
@@ -116,4 +122,9 @@ class Zombie(pygame.sprite.Sprite):
             camera_ref = self.world.camera
         self.rect.x = self.xpos + camera_ref.x_scroll
         self.rect.y = self.ypos + camera_ref.y_scroll
-        
+
+class Small_Zombie(Zombie):
+    def __init__(self, x, y, imgpath, in_room):
+        super().__init__(x, y, imgpath, in_room)
+        self.speed = 4
+        self.damage = 2
