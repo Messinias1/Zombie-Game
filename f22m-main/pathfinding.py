@@ -48,7 +48,7 @@ class PathfindingWorld(World):
     def find_next_move(self, start_xy: (int, int), end_xy: (int, int)) -> (int, int):
         return self.find_next_moves((start_xy[0], start_xy[1]), (end_xy[0], end_xy[1]))[0]
 
-    def find_next_move_towards(self, source: 'Character', target: 'Character') -> [(int, int)]:
+    def find_next_move_towards(self, source: 'Character', target: 'Character') -> (int, int):
         """Same as 'find_next_moves' but you can input two characters instead of x y positions
         :param source the character that will move
         :param target the character to move towards"""
