@@ -28,7 +28,7 @@ class Button:
         self.text_position_x = some_text_position_x
 
         # dictionary holding the colors of the button
-        self.fillColors = {
+        self._fill_colors = {
             'normal': '#46943A',
             'hover': '#59bc4a',
             'pressed': '#023020',
@@ -50,18 +50,16 @@ class Button:
 
         pg.draw.rect(display, background_color, (self.position_x, self.position_y, self.width, self.height), 0, 4)
         # ADD A VERTICAL LINE FOR SHADOW EFFECT
-        pg.draw.rect(display, self.fillColors['side effect'], ((self.position_x + self.width) - 5, self.position_y + 0.5, 5, self.height), 0, 4)
+        pg.draw.rect(display, self._fill_colors['side effect'], ((self.position_x + self.width) - 5, self.position_y + 0.5, 5, self.height), 0, 4)
         # horizontal shadow
-        pg.draw.rect(display, self.fillColors['side effect'], (self.position_x + 1, self.position_y + 25, self.width - 4, self.height - 25), 0, 4)
+        pg.draw.rect(display, self._fill_colors['side effect'], (self.position_x + 1, self.position_y + 25, self.width - 4, self.height - 25), 0, 4)
         text_position = (self.text_position_x, (self.position_y + 1))
         
         # rendering the button and displaying the text on it
         button_text = self.font.render(self.text, False, '#000000')
         display.blit(button_text, text_position)
 
-        return True
-
-    def perform_mouse_click(self, event: pg.event, on_click_function: None, display: pg.surface):
+    def perform_mouse_click(self, event: pg.event, on_click_function: None, display: pg.surface)->None:
         """
         Handles the mouse being clicked while on top of the button.
 
@@ -80,13 +78,11 @@ class Button:
         # FOR LOOP IN MAIN EVENT FOR LOOP CALLING THIS FUNCTION FROM BUTTON
         
         if event.type == pg.MOUSEBUTTONDOWN and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
-            self.draw_button(self.fillColors['pressed'], display)
+            self.draw_button(self._fill_colors['pressed'], display)
         elif event.type == pg.MOUSEBUTTONUP and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             on_click_function()
 
-        return True
-
-    def perform_mouse_hover(self, display) -> bool:
+    def perform_mouse_hover(self, display)->None:
         """
         Changes the color of the button while mouse is hovering over it.
 
@@ -102,11 +98,9 @@ class Button:
 
         # if mouse is within the button, change color to the darker hue
         if mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
-            self.draw_button(self.fillColors['hover'], display)
+            self.draw_button(self._fill_colors['hover'], display)
 
-        return True
-
-    def implement_button(self, display) -> None:
+    def implement_button(self, display)->None:
         """
         Implements the button onto the screen so it can be displayed.
 
@@ -114,7 +108,7 @@ class Button:
         ----------
         display
         """
-        self.draw_button(self.fillColors['normal'], display)
+        self.draw_button(self._fill_colors['normal'], display)
         self.perform_mouse_hover(display)
         
 
