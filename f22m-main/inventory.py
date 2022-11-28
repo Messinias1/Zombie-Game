@@ -41,7 +41,9 @@ class Inventory:
             Parameters:
                 gun {Weapon}: takes in a gun
         """
-        if self.get_gun(gun.get_name()).get_name() == gun.get_name():
+        newGunName = gun.get_name()
+        
+        if self.get_gun(newGunName).get_name() == newGunName:
             raise ValueError("This gun is already in the inventory")
         
         self.gun_list_.append(gun)
@@ -95,7 +97,7 @@ class Inventory:
                 return meleeWeapon
             return None
         
-    def get_item(self, itemName:str)->Item:
+    def get_item(self, itemType:str)->Item:
         """Looks for an item the player might have
 
         Args:
@@ -104,9 +106,9 @@ class Inventory:
         Returns:
             Item: the found item
         """
-        # Item class needs a way to look for a name
+        # Item class needs a way to look for a type
         # for item in self.item_list_:
-        #     if itemName == item.get_name():
+        #     if itemType == item.get_type():
         #         return item
         #     return None
         pass

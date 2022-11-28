@@ -46,4 +46,4 @@ class Weapon:
     def draw(self):
         pass
     def get_name(self):
-        self.name
+        return self.name
