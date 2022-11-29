@@ -110,10 +110,3 @@ class Button:
         """
         self.draw_button(self._fill_colors['normal'], display)
         self.perform_mouse_hover(display)
-        
-
-
-# How to call button example:
-# start_button = Button(some_width = 140, some_height = 50, some_position_x = 300, some_position_y = 300, some_text = 'Quit', some_on_click_function = myFunction, some_already_pressed = True)
-
-    
