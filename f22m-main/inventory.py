@@ -105,9 +105,8 @@ class Inventory:
         Returns:
             Item: the found item
         """
-        # Item class needs a way to look for a type
-        # for item in self.item_list_:
-        #     if itemType == item.get_type():
-        #         return item
-        #     return None
+        for item in self.item_list_:
+            if itemType == item.get_type():
+                return item
+            return None
         pass
