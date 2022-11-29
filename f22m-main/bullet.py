@@ -24,7 +24,7 @@ class Bullet:
         self.x_velocity_ = math.cos(self.angle_) * self.speed_
         self.y_velocity_ = math.sin(self.angle_) * self.speed_
 
-    def get_position(self):
+    def get_position(self) -> tuple:
         """This Returns the position of the bullet
             Returns:
                 pair: current x and y positions
