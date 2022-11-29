@@ -39,7 +39,7 @@ class World:
             x = 0
             this_row = []
             for char in row:
-                this_tile = Tile(x, y, f"assets/images/walls/grass.gif", False, self)   # default is blank tile
+                this_tile = Tile(x, y, f"assets/images/walls/floor.gif", False, self)   # default is blank tile
                 if char.lower() == "w":
                     this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
