@@ -15,6 +15,7 @@ class Throwable:
         self.y_ = y
         self.mouse_x_ = mouse_x
         self.mouse_y_ = mouse_y
+        self.name_ = name
         
     def get_position(self) -> tuple:
         """This Returns the position of the throwable
@@ -25,10 +26,14 @@ class Throwable:
         position = (self.x_, self.y_)
         return position
     
-    def update_position(screen) -> None:
+    def update_position(self, screen) -> None:
         """This Updates the throwable position on the screen
 
             Parameters:
                 screen {Screen}: takes in the screen object
         """
+        "TODO - actually update the position of the throwable"
         pass
+    
+    def get_name(self) -> str:
+        return self.name_
