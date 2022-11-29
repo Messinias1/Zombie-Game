@@ -39,13 +39,17 @@ class World:
             x = 0
             this_row = []
             for char in row:
-                this_tile = Tile(x, y, f"assets/images/walls/blank.gif", False, self)   # default is blank tile
+                this_tile = Tile(x, y, f"assets/images/walls/grass.gif", False, self)   # default is blank tile
                 if char.lower() == "w":
                     this_tile = Tile(x, y, f"assets/images/walls/wood.gif", True, self)
                 if char.lower() == "b":
                     this_tile = Tile(x, y, f"assets/images/walls/black.gif", True, self)
                 if char.lower() == "s":
                     this_tile = Tile(x, y, f"assets/images/walls/stone.gif", True, self)
+                if char.lower() == "r":
+                    this_tile = Tile(x, y, f"assets/images/walls/road_side.gif", False, self)
+                if char.lower() == "d":
+                    this_tile = Tile(x, y, f"assets/images/walls/road_down.gif", False, self)
                 self.room_tile_group.add(this_tile)
                 self.room_sprite_group.add(this_tile)
                 this_row.append(this_tile)
