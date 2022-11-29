@@ -33,7 +33,7 @@ class Bullet:
         position = (self.x_, self.y_)
         return position
     
-    def update_position(self, screen):
+    def update_position(self, screen: pygame.Surface) -> None:
         """This Updates the Bullet position on the screen
 
             Parameters:
