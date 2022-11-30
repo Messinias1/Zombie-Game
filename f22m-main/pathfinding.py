@@ -2,6 +2,10 @@ from world import World
 from tile import Tile
 
 
+class NoValidPath(Exception):
+    pass
+
+
 class Node:
     """A node class for A* Pathfinding"""
 
@@ -39,20 +43,26 @@ class PathfindingWorld(World):
         start_pos = Tile.xy_to_rowcol(start_xy)
         end_pos = Tile.xy_to_rowcol(end_xy)
         try:
-            path = self.astar(start_pos, end_pos)
+            path = self.run_pathfinding(start_pos, end_pos)
             path.pop(0)
-        except IndexError:  # if the end or start tile is a wall
+        except NoValidPath:  # if the end or start tile is a wall
             path = [start_pos]  # stay at the starting pos
         return path
 
     def find_next_move(self, start_xy: (int, int), end_xy: (int, int)) -> (int, int):
         return self.find_next_moves((start_xy[0], start_xy[1]), (end_xy[0], end_xy[1]))[0]
 
-    def find_next_move_towards(self, source: 'Character', target: 'Character') -> [(int, int)]:
+    def find_next_move_towards(self, source: 'Character', target: 'Character') -> (int, int):
         """Same as 'find_next_moves' but you can input two characters instead of x y positions
         :param source the character that will move
         :param target the character to move towards"""
         return self.find_next_move((source.xpos, source.ypos), (target.xpos, target.ypos))
+
+    def run_pathfinding(self, start, end):
+        re = self.astar(start, end)
+        if re is None:
+            raise NoValidPath
+        return re
 
     def astar(self, start, end):
         """Returns a list of tuples as a path from the given start to the given end in the given self.maze"""
@@ -66,7 +76,7 @@ class PathfindingWorld(World):
         start_node.g = start_node.h = start_node.f = 0
         end_node = Node(None, end)
         if self.get_node_val(end_node) != "-" or self.get_node_val(start_node) != "-":
-            raise IndexError  # the end or start node is a wall
+            raise NoValidPath  # the end or start node is a wall
         end_node.g = end_node.h = end_node.f = 0
 
         # Initialize both open and closed list

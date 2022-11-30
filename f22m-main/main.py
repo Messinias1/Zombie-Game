@@ -46,7 +46,7 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
+world_room = PathfindingWorld("assets/rooms/layout2.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
@@ -110,7 +110,8 @@ while run:
 
     # event handler
     handle_input(player)
-    zombie.pathfind_towards_char(player)
+    #zombie.pathfind_towards_char(player)
+    zombie.move_towards_player(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
