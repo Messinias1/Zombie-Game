@@ -13,9 +13,9 @@ def handle_input(player):
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        
         #performs click event for the quit button
-        quit_button.perform_mouse_click(event, quit_game, screen)
+        mouse_position_x, mouse_position_y = pygame.mouse.get_pos()
+        quit_button.perform_mouse_click(event, quit_game, screen, mouse_position_x, mouse_position_y)
 
     keys = pygame.key.get_pressed()
 
