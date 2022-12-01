@@ -1,8 +1,6 @@
 from button import Button
 import unittest
-import os
 from unittest.mock import patch, MagicMock
-from unittest import mock
 from pygame import draw, Color, Surface, event
 import pygame as pg
 
@@ -10,6 +8,14 @@ class ButtonTest(unittest.TestCase):
 
     @patch('pygame.draw.rect')
     def test_draw_button(self, mock_rect):
+        """
+        Tests the Draw Button method is called with the correct color.
+
+        Parameters
+        ----------
+        mock_rect
+        """
+
         assert mock_rect is draw.rect
 
         # parameters for draw_button
@@ -31,11 +37,44 @@ class ButtonTest(unittest.TestCase):
 
         assert rectangle_color == test_color
 
-    def pass_as_any_function(self) -> None:
-        # do nothing
-        pass
+    def test_perform_mouse_down(self):
+        """
+        Tests the if statement passes and the function is called when the mouse is pressed down and on the button.
+        """
 
-    def test_perform_mouse_click(self):
+        pg.init()
+        # parameters for perform_mouse_click
+        test_surface = Surface((800, 600))
+        test_event = event
+        test_event.type = pg.MOUSEBUTTONDOWN
+        test_mouse_position_x = 61
+        test_mouse_position_y = 576
+
+        # placeholder function to pass into perform_mouse_click that does nothing
+        def pass_as_any_function() -> None:
+            # do nothing
+            pass
+
+        # mocking draw_button method
+        Button.draw_button = MagicMock()
+
+        quit_button = Button(some_width = 75,
+                        some_height = 30,
+                        some_position_x = 10,
+                        some_position_y = 560,
+                        some_text = 'Quit',
+                        some_text_position_x = 29)
+
+        quit_button.perform_mouse_click(test_event, pass_as_any_function(), test_surface, test_mouse_position_x, test_mouse_position_y)
+
+        # asserting that the draw_button method is being called once 
+        # when the if statement for the down click passes
+        Button.draw_button.assert_called_once()
+
+    def test_perform_mouse_up(self):
+        """
+        Tests the if statement passes and the function is called when the mouse is released and on the button.
+        """
 
         pg.init()
         # parameters for perform_mouse_click
@@ -45,7 +84,13 @@ class ButtonTest(unittest.TestCase):
         test_mouse_position_x = 61
         test_mouse_position_y = 576
 
-        on_click_function = MagicMock()
+        # placeholder function to pass into perform_mouse_click that does nothing
+        def pass_as_any_function() -> None:
+            # do nothing
+            pass
+
+        # mocking the placeholder method
+        pass_as_any_function = MagicMock()
 
         quit_button = Button(some_width = 75,
                         some_height = 30,
@@ -54,11 +99,16 @@ class ButtonTest(unittest.TestCase):
                         some_text = 'Quit',
                         some_text_position_x = 29)
 
-        quit_button.perform_mouse_click(test_event, self.pass_as_any_function(), test_surface, test_mouse_position_x, test_mouse_position_y)
+        quit_button.perform_mouse_click(test_event, pass_as_any_function(), test_surface, test_mouse_position_x, test_mouse_position_y)
 
-        on_click_function.assert_called_once()
+        # asserting that the placeholder method is being called once 
+        # when the if statement for the up click passes
+        pass_as_any_function.assert_called_once()
 
-    def test_implement_button(self):
+    def test_mouse_hover(self):
+        """
+        Tests the if statement passes and the function is called when the mouse is on the button.
+        """
         
         pg.init()
 

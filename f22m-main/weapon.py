@@ -1,3 +1,5 @@
+import pygame
+
 """A player's weapon object
 """
 class Weapon:
@@ -8,7 +10,7 @@ class Weapon:
     """
     def __init__(self, textures, stats, sounds) -> None:
         # Spritesheet configuration
-        self.spritesheet = pygame.image.load(None)
+        # self.spritesheet = pygame.image.load(None)
 
         # Sound configuration
         self.sounds = sounds
@@ -43,3 +45,5 @@ class Weapon:
     # Displays the gun
     def draw(self):
         pass
+    def get_name(self):
+        return self.name

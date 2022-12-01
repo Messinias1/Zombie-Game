@@ -43,10 +43,6 @@ class Button:
         Parameters
         ----------
         background_color, display
-
-        Returns
-        ----------
-        True
         """
 
         draw.rect(display, background_color, Rect(self.position_x, self.position_y, self.width, self.height), 0, 4)
@@ -60,17 +56,13 @@ class Button:
         button_text = self.font.render(self.text, False, '#000000')
         display.blit(button_text, text_position)
 
-    def perform_mouse_click(self, event: event, on_click_function: any, display: Surface, mouse_position_x: int, mouse_position_y: int)->None:
+    def perform_mouse_click(self, event: event, on_click_function: None, display: Surface, mouse_position_x: int, mouse_position_y: int)->None:
         """
         Handles the mouse being clicked while on top of the button.
 
         Parameters
         ----------
-        event, on_click_function, display
-
-        Returns
-        ----------
-        True
+        event, on_click_function, display, mouse_position_x, mouse_position_y
         """
         
         if event.type == pg.MOUSEBUTTONDOWN and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
@@ -78,17 +70,13 @@ class Button:
         elif event.type == pg.MOUSEBUTTONUP and mouse_position_x > self.position_x and mouse_position_x < (self.position_x + self.width) and mouse_position_y > self.position_y and mouse_position_y < (self.position_y + self.height):
             on_click_function()
 
-    def perform_mouse_hover(self, mouse_position_x, mouse_position_y, display: Surface)->None:
+    def perform_mouse_hover(self, mouse_position_x: int, mouse_position_y: int, display: Surface)->None:
         """
         Changes the color of the button while mouse is hovering over it.
 
         Parameters
         ----------
-        display
-
-        Returns
-        ----------
-        True
+        mouse_position_x, mouse_position_y, display
         """
 
         # if mouse is within the button, change color to the darker hue
