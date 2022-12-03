@@ -42,7 +42,6 @@ class ButtonTest(unittest.TestCase):
         Tests the if statement passes and the function is called when the mouse is pressed down and on the button.
         """
 
-        pg.init()
         # parameters for perform_mouse_click
         test_surface = Surface((800, 600))
         test_event = event
@@ -76,7 +75,6 @@ class ButtonTest(unittest.TestCase):
         Tests the if statement passes and the function is called when the mouse is released and on the button.
         """
 
-        pg.init()
         # parameters for perform_mouse_click
         test_surface = Surface((800, 600))
         test_event = event
@@ -109,8 +107,6 @@ class ButtonTest(unittest.TestCase):
         """
         Tests the if statement passes and the function is called when the mouse is on the button.
         """
-        
-        pg.init()
 
         # parameters for perform_mouse_hover
         test_surface = Surface((800, 600))
