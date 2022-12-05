@@ -61,6 +61,7 @@ class Character(pygame.sprite.Sprite):
         self.ypos += add_y
 
     def is_touching(self, other: 'Character') -> bool:
+        """If distance between self and 'other' is 0, they're touching"""
         dx, dy = self.rect.x - other.rect.x, self.rect.y - other.rect.y + 10
         dist = int(math.hypot(dx, dy))
         return dist == 0
