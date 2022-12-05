@@ -67,10 +67,14 @@ class Character(pygame.sprite.Sprite):
 
     def take_hit(self, damage: int) -> int:
         """First, checks if player can take damage based on hit_cooldown, if true then take damage
-        :param damage amount of health to lose if damage can be taken"""
+        :param damage amount of health to lose if damage can be taken
+        :returns how much damage was taken"""
         if pygame.time.get_ticks() - self.dmg_update_time > self.dmg_cd:
             self.dmg_update_time = pygame.time.get_ticks()
             self.health -= damage
+            return damage
+        else:
+            return 0
 
     def check_for_collisions(self, try_x=None, try_y=None) -> (int, int):
         if try_x is None:
