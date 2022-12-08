@@ -7,14 +7,17 @@ from character import Character
 from zombie import Zombie
 from pathfinding import PathfindingWorld
 from button import Button
+from bullet import Bullet
 
 def handle_input(player):
     for event in pygame.event.get():
+        mouse_position_x, mouse_position_y = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        #performs click event for the quit button
-        mouse_position_x, mouse_position_y = pygame.mouse.get_pos()
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            bullet_list.append(Bullet( (player.xpos+world_room.camera.x_scroll), (player.ypos+world_room.camera.y_scroll), mouse_position_x, mouse_position_y))
+            
         quit_button.perform_mouse_click(event, quit_game, screen, mouse_position_x, mouse_position_y)
 
     keys = pygame.key.get_pressed()
@@ -71,6 +74,8 @@ item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world
 
 ]
 
+bullet_list = []
+
 #Create Sprite Groups:
 item_sprites = pygame.sprite.Group()
 for item in item_list:
@@ -117,6 +122,9 @@ while run:
 
     for item in item_list:
         item.update()
+
+    for bullet in bullet_list:
+        bullet.update_position(screen)
 
     world_room.camera.follow_character(player)
 
