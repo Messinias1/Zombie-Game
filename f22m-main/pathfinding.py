@@ -43,7 +43,7 @@ class PathfindingWorld(World):
         start_pos = Tile.xy_to_rowcol(start_xy)
         end_pos = Tile.xy_to_rowcol(end_xy)
         try:
-            path = self.run_pathfinding(start_pos, end_pos)
+            path = self.astar(start_pos, end_pos)
             path.pop(0)
         except NoValidPath:  # if the end or start tile is a wall
             path = [start_pos]  # stay at the starting pos
@@ -58,12 +58,6 @@ class PathfindingWorld(World):
         :param target the character to move towards"""
         return self.find_next_move((source.xpos, source.ypos), (target.xpos, target.ypos))
 
-    def run_pathfinding(self, start, end):
-        re = self.astar(start, end)
-        if re is None:
-            raise NoValidPath
-        return re
-
     def astar(self, start, end):
         """Returns a list of tuples as a path from the given start to the given end in the given self.maze"""
         for i in range(len(self.maze)):
@@ -75,7 +69,9 @@ class PathfindingWorld(World):
         start_node = Node(None, start)
         start_node.g = start_node.h = start_node.f = 0
         end_node = Node(None, end)
-        if self.get_node_val(end_node) != "-" or self.get_node_val(start_node) != "-":
+        start_tile = self.find_tile_by_row_col(start_node.position)
+        end_tile = self.find_tile_by_row_col(end_node.position)
+        if start_tile.collideable or end_tile.collideable:
             raise NoValidPath  # the end or start node is a wall
         end_node.g = end_node.h = end_node.f = 0
 
@@ -91,7 +87,7 @@ class PathfindingWorld(World):
 
             # Get the current node
             current_node = open_list[0]
-            #print(current_node.position)
+            print(current_node.position)
             current_index = 0
             for index, item in enumerate(open_list):
                 if item.f < current_node.f:
@@ -154,5 +150,8 @@ class PathfindingWorld(World):
 
                 # Add the child to the open list
                 open_list.append(child)
+
+        # if it gets past the while loop without returning, then no valid path was found
+        raise NoValidPath
 
 
