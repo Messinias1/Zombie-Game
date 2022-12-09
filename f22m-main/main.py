@@ -8,6 +8,7 @@ from zombie import Zombie
 from pathfinding import PathfindingWorld
 from button import Button
 from bullet import Bullet
+from weapon import Weapon
 
 def handle_input(player):
     for event in pygame.event.get():
@@ -40,7 +41,6 @@ def handle_input(player):
 
     player.move(dx, dy)
 
-
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
@@ -50,9 +50,13 @@ pygame.display.set_caption("Zombie Game")
 
 # create the world
 world_room = PathfindingWorld("assets/rooms/layout2.json").init_room()
+
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
+
+#create pistol
+pistol  = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -71,7 +75,6 @@ def quit_game():
 item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player), 
               Item(300, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player),
               Item(200, 200, "assets/images/items/potion_red.png", 100, "Healable", world_room, player)
-
 ]
 
 bullet_list = []
@@ -125,6 +128,8 @@ while run:
 
     for bullet in bullet_list:
         bullet.update_position(screen)
+
+    pistol.update(screen)
 
     world_room.camera.follow_character(player)
 
