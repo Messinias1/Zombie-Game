@@ -92,7 +92,7 @@ coin_txt_rect.center = (800-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().
 
 #Health Text:
 health_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
-health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 health_txt_rect = health_txt.get_rect()
 health_txt_rect.center = (0+(health_txt.get_rect().width), 0+(health_txt.get_rect().height))
 
@@ -130,7 +130,7 @@ while run:
 
     #Text Display
     coin_txt = coin_font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
-    health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+    health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
