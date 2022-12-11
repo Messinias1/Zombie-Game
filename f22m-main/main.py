@@ -89,7 +89,7 @@ run = True
 
 #Coin Text:
 coin_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
-coin_txt = coin_font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
+coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
 coin_txt_rect = coin_txt.get_rect()
 coin_txt_rect.center = (800-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
 
@@ -134,7 +134,8 @@ while run:
     world_room.camera.follow_character(player)
 
     #Text Display
-    coin_txt = coin_font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
+
+    coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
     health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)

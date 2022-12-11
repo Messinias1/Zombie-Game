@@ -3,6 +3,7 @@ import math
 import pygame
 import constants
 import os
+from currency import Currency
 from health import Health
 
 
@@ -32,8 +33,9 @@ class Character(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.health = Health()  # starting health
-        self.coins = 0
+        self.coins = Currency()
+        self.health = Health()  # 200 starting health
+
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)

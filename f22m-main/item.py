@@ -20,7 +20,7 @@ class Item(pygame.sprite.Sprite):
 
     def use(self):
         if self.type == "Coin":
-            self.player.coins += self.strength
+            self.player.coins.coins += self.strength
             
         if self.type == "Healable":
             self.player.health.health += self.strength
