@@ -11,15 +11,19 @@ from zombie import Big_Zombie
 from pathfinding import PathfindingWorld
 from world import World
 from button import Button
+from bullet import Bullet
+from weapon import Weapon
 
 def handle_input(player):
     for event in pygame.event.get():
+        mouse_position_x, mouse_position_y = pygame.mouse.get_pos()
         if event.type == pygame.QUIT:
             pygame.quit()
             exit()
-        
-        #performs click event for the quit button
-        quit_button.perform_mouse_click(event, quit_game, screen)
+        if event.type == pygame.MOUSEBUTTONDOWN:
+            bullet_list.append(Bullet( (player.xpos+world_room.camera.x_scroll), (player.ypos+world_room.camera.y_scroll), mouse_position_x, mouse_position_y))
+            
+        quit_button.perform_mouse_click(event, quit_game, screen, mouse_position_x, mouse_position_y)
 
     keys = pygame.key.get_pressed()
 
@@ -41,7 +45,6 @@ def handle_input(player):
 
     player.move(dx, dy)
 
-
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
@@ -52,9 +55,13 @@ screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGH
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = World("assets/rooms/layout1.json").init_room()
+world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
+zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
+
+#create pistol
+pistol  = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
 
 
 # create quit button
@@ -74,8 +81,8 @@ def quit_game():
 item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player), 
               Item(300, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player),
               Item(200, 200, "assets/images/items/potion_red.png", 100, "Healable", world_room, player)
-
 ]
+
 
 #Create Zombies:
 zombie_list = [ Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room),
@@ -83,6 +90,8 @@ zombie_list = [ Zombie(400, 300, "assets/images/characters/tiny_zombie", world_r
     
 for x in range(1):
     zombie_list.append(Big_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room))
+
+bullet_list = []
 
 #Create Sprite Groups:
 item_sprites = pygame.sprite.Group()
@@ -99,13 +108,13 @@ run = True
 
 #Coin Text:
 coin_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
-coin_txt = coin_font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
+coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
 coin_txt_rect = coin_txt.get_rect()
 coin_txt_rect.center = (800-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
 
 #Health Text:
 health_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
-health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 health_txt_rect = health_txt.get_rect()
 health_txt_rect.center = (0+(health_txt.get_rect().width), 0+(health_txt.get_rect().height))
 
@@ -129,8 +138,10 @@ while run:
 
     # event handler
     handle_input(player)
+
     for zombie in zombie_sprites:
         zombie.move_towards_player(player)
+
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
@@ -146,15 +157,23 @@ while run:
     for zombie in zombie_list:
         zombie.update()
 
+    for bullet in bullet_list:
+        bullet.update_position(screen)
+
+    pistol.update(screen)
+
+
     world_room.camera.follow_character(player)
 
     #Text Display
-    coin_txt = coin_font.render('Coins: ' + str(player.coins), True, (255, 255, 255))
-    health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+
+    coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
+    health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
 
     pygame.display.update()
-
+    if player.is_touching(zombie):
+        player.take_hit(zombie.attack)
 pygame.quit()

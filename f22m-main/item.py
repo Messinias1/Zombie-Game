@@ -1,6 +1,5 @@
 import pygame
 
-
 class Item(pygame.sprite.Sprite):
     def __init__(self, x, y, img, strength, type, in_room, player):
         super().__init__()
@@ -21,10 +20,10 @@ class Item(pygame.sprite.Sprite):
 
     def use(self):
         if self.type == "Coin":
-            self.player.coins += self.strength
+            self.player.coins.coins += self.strength
             
         if self.type == "Healable":
-            self.player.health += self.strength
+            self.player.health.health += self.strength
 
     def update(self, camera_ref=None):
         # take into account camera scroll when setting position

@@ -2,6 +2,10 @@ from world import World
 from tile import Tile
 
 
+class NoValidPath(Exception):
+    pass
+
+
 class Node:
     """A node class for A* Pathfinding"""
 
@@ -41,14 +45,14 @@ class PathfindingWorld(World):
         try:
             path = self.astar(start_pos, end_pos)
             path.pop(0)
-        except IndexError:  # if the end or start tile is a wall
+        except NoValidPath:  # if the end or start tile is a wall
             path = [start_pos]  # stay at the starting pos
         return path
 
     def find_next_move(self, start_xy: (int, int), end_xy: (int, int)) -> (int, int):
         return self.find_next_moves((start_xy[0], start_xy[1]), (end_xy[0], end_xy[1]))[0]
 
-    def find_next_move_towards(self, source: 'Character', target: 'Character') -> [(int, int)]:
+    def find_next_move_towards(self, source: 'Character', target: 'Character') -> (int, int):
         """Same as 'find_next_moves' but you can input two characters instead of x y positions
         :param source the character that will move
         :param target the character to move towards"""
@@ -65,8 +69,10 @@ class PathfindingWorld(World):
         start_node = Node(None, start)
         start_node.g = start_node.h = start_node.f = 0
         end_node = Node(None, end)
-        if self.get_node_val(end_node) != "-" or self.get_node_val(start_node) != "-":
-            raise IndexError  # the end or start node is a wall
+        start_tile = self.find_tile_by_row_col(start_node.position)
+        end_tile = self.find_tile_by_row_col(end_node.position)
+        if start_tile.collideable or end_tile.collideable:
+            raise NoValidPath  # the end or start node is a wall
         end_node.g = end_node.h = end_node.f = 0
 
         # Initialize both open and closed list
@@ -81,7 +87,7 @@ class PathfindingWorld(World):
 
             # Get the current node
             current_node = open_list[0]
-            #print(current_node.position)
+            print(current_node.position)
             current_index = 0
             for index, item in enumerate(open_list):
                 if item.f < current_node.f:
@@ -144,5 +150,8 @@ class PathfindingWorld(World):
 
                 # Add the child to the open list
                 open_list.append(child)
+
+        # if it gets past the while loop without returning, then no valid path was found
+        raise NoValidPath
 
 
