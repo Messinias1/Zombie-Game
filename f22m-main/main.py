@@ -8,6 +8,7 @@ from zombie import Zombie
 from pathfinding import PathfindingWorld
 from button import Button
 from bullet import Bullet
+from weapon import Weapon
 
 def handle_input(player):
     for event in pygame.event.get():
@@ -40,7 +41,6 @@ def handle_input(player):
 
     player.move(dx, dy)
 
-
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
@@ -50,9 +50,13 @@ pygame.display.set_caption("Zombie Game")
 
 # create the world
 world_room = PathfindingWorld("assets/rooms/layout2.json").init_room()
+
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
+
+#create pistol
+pistol  = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -71,7 +75,6 @@ def quit_game():
 item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player), 
               Item(300, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player),
               Item(200, 200, "assets/images/items/potion_red.png", 100, "Healable", world_room, player)
-
 ]
 
 bullet_list = []
@@ -92,7 +95,7 @@ coin_txt_rect.center = (800-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().
 
 #Health Text:
 health_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
-health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 health_txt_rect = health_txt.get_rect()
 health_txt_rect.center = (0+(health_txt.get_rect().width), 0+(health_txt.get_rect().height))
 
@@ -126,11 +129,14 @@ while run:
     for bullet in bullet_list:
         bullet.update_position(screen)
 
+    pistol.update(screen)
+
     world_room.camera.follow_character(player)
 
     #Text Display
+
     coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
-    health_txt = health_font.render('Health: ' + str(player.health), True, (255, 255, 255))
+    health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)

@@ -4,6 +4,7 @@ import pygame
 import constants
 import os
 from currency import Currency
+from health import Health
 
 
 class Character(pygame.sprite.Sprite):
@@ -32,8 +33,9 @@ class Character(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.health = 100  # starting health
         self.coins = Currency()
+        self.health = Health()  # 200 starting health
+
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -73,7 +75,7 @@ class Character(pygame.sprite.Sprite):
         :returns how much damage was taken"""
         if pygame.time.get_ticks() - self.dmg_update_time > self.dmg_cd:
             self.dmg_update_time = pygame.time.get_ticks()
-            self.health -= damage
+            self.health.health -= damage
             return damage
         else:
             return 0
