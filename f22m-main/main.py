@@ -1,12 +1,15 @@
 import pygame
 import constants
 import math
+import time
 
 from item import Item
 from character import Character
 from zombie import Zombie
 from zombie import Small_Zombie
+from zombie import Big_Zombie
 from pathfinding import PathfindingWorld
+from world import World
 from button import Button
 
 def handle_input(player):
@@ -42,16 +45,17 @@ def handle_input(player):
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
+#initialized time for attack timer
+start_time = time.time()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
+world_room = World("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
-zombie1 = Small_Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
-zombie2 = Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room)
+
 
 # create quit button
 quit_button = Button(some_width = 75,
@@ -73,10 +77,22 @@ item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world
 
 ]
 
+#Create Zombies:
+zombie_list = [ Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room),
+                Small_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room)]
+    
+for x in range(1):
+    zombie_list.append(Big_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room))
+
 #Create Sprite Groups:
 item_sprites = pygame.sprite.Group()
 for item in item_list:
     item_sprites.add(item)
+
+#Create Zombie Groups:
+zombie_sprites = pygame.sprite.Group()
+for zombie in zombie_list:
+    zombie_sprites.add(zombie)
 
 # main game loop
 run = True
@@ -105,6 +121,7 @@ while run:
         item.picked_up = True
 
     item_sprites.draw(screen)
+    zombie_sprites.draw(screen)
     world_room.room_sprite_group.draw(screen)
 
     # create quit button
@@ -112,13 +129,22 @@ while run:
 
     # event handler
     handle_input(player)
-    zombie1.pathfind_towards_char(player)
-    zombie2.pathfind_towards_char(player)
+    for zombie in zombie_sprites:
+        zombie.move_towards_player(player)
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
+    #timer for attack patterns
+    if time.time() - start_time > 1:
+        for zombie in zombie_sprites:
+            zombie.deal_damage(player)
+        start_time = time.time()
+
     for item in item_list:
         item.update()
+
+    for zombie in zombie_list:
+        zombie.update()
 
     world_room.camera.follow_character(player)
 
