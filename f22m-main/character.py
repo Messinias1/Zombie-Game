@@ -3,6 +3,7 @@ import math
 import pygame
 import constants
 import os
+from currency import Currency
 
 
 class Character(pygame.sprite.Sprite):
@@ -32,7 +33,7 @@ class Character(pygame.sprite.Sprite):
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
         self.health = 100  # starting health
-        self.coins = 0
+        self.coins = Currency()
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
