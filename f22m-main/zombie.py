@@ -28,6 +28,8 @@ class Zombie(pygame.sprite.Sprite):
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
         self.speed = 2
+        self.init_health = 10
+        self.current_health = 10
         self.damage = 5
         self.alive = True
 
@@ -107,7 +109,8 @@ class Zombie(pygame.sprite.Sprite):
 
     def deal_damage(self,player):
         if self.rect.colliderect(player.rect):
-            player.health -= self.damage
+            player.health.health -= self.damage
+            self.current_health = 0 
 
     def update(self, camera_ref=None):
         animation_cooldown = 70
@@ -130,9 +133,13 @@ class Small_Zombie(Zombie):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 4
         self.damage = 2
+        self.init_health = 5
+        self.current_health = 5
 
 class Big_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 1
         self.damage = 5
+        self.init_health = 20
+        self.current_health = 20

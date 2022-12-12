@@ -2,6 +2,7 @@ import pygame
 import constants
 import math
 import time
+import random
 
 from item import Item
 from character import Character
@@ -45,11 +46,24 @@ def handle_input(player):
 
     player.move(dx, dy)
 
+def create_zombie(zombie_list,zombie_sprites):
+    zombie_rand = random.randint(1,3)
+    if zombie_rand == 1:
+        new_zombie = Zombie(random.randint(33, constants.SCREEN_WIDTH - 33), random.randint(33, constants.SCREEN_HEIGHT - 33), "assets/images/characters/tiny_zombie", world_room)
+    elif zombie_rand == 2:
+        new_zombie = Small_Zombie(random.randint(33, constants.SCREEN_WIDTH - 33), random.randint(33, constants.SCREEN_HEIGHT - 33), "assets/images/characters/tiny_zombie", world_room)
+    elif zombie_rand == 3:
+        new_zombie = Big_Zombie(random.randint(33, constants.SCREEN_WIDTH - 33), random.randint(33, constants.SCREEN_HEIGHT - 33), "assets/images/characters/tiny_zombie", world_room)
+    zombie_list.append(new_zombie)
+    zombie_sprites.add(new_zombie)
+    
+
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
 #initialized time for attack timer
-start_time = time.time()
+start_timer_time = time.time()
+start_spawn_time = time.time()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Game")
@@ -58,7 +72,6 @@ pygame.display.set_caption("Zombie Game")
 world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
-zombie = Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room)
 
 #create pistol
 pistol  = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
@@ -87,9 +100,8 @@ item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world
 #Create Zombies:
 zombie_list = [ Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room),
                 Small_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room)]
-    
-for x in range(1):
-    zombie_list.append(Big_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room))
+
+dead_enemy_list = []
 
 bullet_list = []
 
@@ -102,6 +114,8 @@ for item in item_list:
 zombie_sprites = pygame.sprite.Group()
 for zombie in zombie_list:
     zombie_sprites.add(zombie)
+
+create_zombie(zombie_list, zombie_sprites)
 
 # main game loop
 run = True
@@ -117,6 +131,13 @@ health_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
 health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
 health_txt_rect = health_txt.get_rect()
 health_txt_rect.center = (0+(health_txt.get_rect().width), 0+(health_txt.get_rect().height))
+
+#Wave Text:
+wave = 1
+wave_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
+wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
+wave_txt_rect = wave_txt.get_rect()
+wave_txt_rect.center = (600-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
 
 while run:
     # Background Color
@@ -145,11 +166,27 @@ while run:
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
+    if len(zombie_sprites) == 0:
+        wave += 1
+        zombie_list = []
+        zombie_sprites.empty()
+        add_rand_amount_zombies = random.randint(1,3)
+        for x in range(len(dead_enemy_list) + add_rand_amount_zombies):
+            create_zombie(zombie_list, zombie_sprites)
+        dead_enemy_list = []
+
+    for zombie in zombie_sprites:
+        if zombie.current_health <= 0:
+            zombie.alive = False
+        if zombie.alive == False:
+            dead_enemy_list.append(zombie)
+            zombie.kill()
+
     #timer for attack patterns
-    if time.time() - start_time > 1:
+    if time.time() - start_timer_time > 1:
         for zombie in zombie_sprites:
             zombie.deal_damage(player)
-        start_time = time.time()
+        start_timer_time = time.time()
 
     for item in item_list:
         item.update()
@@ -169,11 +206,17 @@ while run:
 
     coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
     health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
+    wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
+    screen.blit(wave_txt, wave_txt_rect)
 
-    pygame.display.update()
     if player.is_touching(zombie):
         player.take_hit(zombie.attack)
+
+    if player.health.health <= 0:
+        run == False
+
+    pygame.display.update()
 pygame.quit()
