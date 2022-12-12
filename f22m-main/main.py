@@ -1,10 +1,6 @@
 import pygame
 import constants
-
-import math
-import time
 import random
-
 from item import Item
 from character import Character
 from zombie import Zombie
@@ -92,18 +88,17 @@ def quit_game():
 
 
 # Create Items:
-item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player), 
+item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player),
               Item(300, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player),
               Item(200, 200, "assets/images/items/potion_red.png", 100, "Healable", world_room, player)
 ]
-
 
 #Create Zombies:
 zombie_list = [ Zombie(400, 300, "assets/images/characters/tiny_zombie", world_room),
                 Small_Zombie(600, 400, "assets/images/characters/tiny_zombie", world_room)]
 
 dead_enemy_list = []
-
+wave_start_time = 0
 bullet_list = []
 
 #Create Sprite Groups:
@@ -140,6 +135,12 @@ wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
 wave_txt_rect = wave_txt.get_rect()
 wave_txt_rect.center = (600-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
 
+# Zombies remaining
+rem_enemies_font = pygame.font.SysFont('inkfree', 30, italic=False, bold=True)
+rem_enemies_txt = coin_font.render('Zombies: ' + str(len(zombie_list)), True, (255, 255, 255))
+rem_enemies_txt_rect = wave_txt.get_rect()
+rem_enemies_txt_rect.center = (400 - (coin_txt.get_rect().width), 0 + (coin_txt.get_rect().height))
+
 while run:
     # Background Color
     clock.tick(constants.FPS)
@@ -165,7 +166,8 @@ while run:
     # run the .update() functions for everything in the room
     world_room.update_room_sprites()
 
-    if len(zombie_sprites) == 0:
+    if len(zombie_sprites) == 0 and pygame.time.get_ticks() > wave_start_time:
+        # add time between each wave (constants.TIME_BETWEEN_WAVES)
         wave += 1
         zombie_list = []
         zombie_sprites.empty()
@@ -173,13 +175,6 @@ while run:
         for x in range(len(dead_enemy_list) + add_rand_amount_zombies):
             create_zombie(zombie_list, zombie_sprites)
         dead_enemy_list = []
-
-    for zombie in zombie_sprites:
-        if zombie.current_health <= 0:
-            zombie.alive = False
-        if zombie.alive == False:
-            dead_enemy_list.append(zombie)
-            zombie.kill()
 
     if pygame.time.get_ticks() - start_time > constants.ZOMBIE_ATTACK_CD:
         for zombie in zombie_sprites:
@@ -201,8 +196,16 @@ while run:
                 dead_zombies.append(z)
 
     for z in dead_zombies:
-        zombie_list.remove(z)
-        world_room.room_sprite_group.remove(z)
+        try:
+            dead_enemy_list.append(z)
+            zombie_list.remove(z)
+            zombie_sprites.remove(z)
+            world_room.room_sprite_group.remove(z)
+        except ValueError:
+            #  if the zombie was already removed, ValueError is raised, don't raise it
+            pass
+        if len(zombie_list) == 0:
+            wave_start_time = pygame.time.get_ticks() + constants.TIME_BETWEEN_WAVES
 
     pistol.update(screen)
 
@@ -213,16 +216,15 @@ while run:
     coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
     health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
     wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
+    rem_enemies_txt = rem_enemies_font.render(f"Zombies: {len(zombie_list)}", True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
     screen.blit(wave_txt, wave_txt_rect)
-    
-    if player.is_touching(zombie):
-        player.take_hit(zombie.attack)
+    screen.blit(rem_enemies_txt, rem_enemies_txt_rect)
 
     if player.health.health <= 0:
-        run == False
+        run = False
 
     pygame.display.update()
 
