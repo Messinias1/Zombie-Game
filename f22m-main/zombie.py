@@ -3,6 +3,7 @@ import constants
 import os
 import math
 from tile import Tile
+from health import Health
 
 
 class Zombie(pygame.sprite.Sprite):
@@ -11,24 +12,22 @@ class Zombie(pygame.sprite.Sprite):
         in_room.room_sprite_group.add(self)
         self.animation_list = []
         [self.animation_list.append(imgpath + "/idle/" + filename) for filename in os.listdir(imgpath + "/idle/")]
-        # the image path dir will have multiple images, where each one is a frame in the character's animation
-        # I haven't coded anything that makes the animation play
-        # I only set the main image to the first file found in the dir
-      
         # convert all images
         for i in range(len(self.animation_list)):
             self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
+        self.dmg_update_time = self.update_time
+        self.dmg_cd = 500  # time to wait between taking damage
         self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
-        self.attack = 10  # how much damage to deal player onhit?
         self.dir = "left"
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
-        self.speed = 2
+        self.speed = 1.5
         self.damage = 5
+        self.health = Health(40)
         self.alive = True
 
     def draw(self, surface):
@@ -74,6 +73,9 @@ class Zombie(pygame.sprite.Sprite):
     def dist_to_char(self, towards_who):
         return math.dist((towards_who.xpos, towards_who.ypos), (self.xpos, self.ypos))
 
+    def rect_dist_to_point(self, pos: (int, int)):
+        return math.dist((pos[0], pos[1]), (self.rect.x, self.rect.y))
+
     def change_x_and_y(self, add_x, add_y):
         # control diagonal movement
         if self.dir == "left" and add_x < 0:
@@ -107,7 +109,16 @@ class Zombie(pygame.sprite.Sprite):
 
     def deal_damage(self,player):
         if self.rect.colliderect(player.rect):
-            player.health -= self.damage
+            player.health.subtract(self.damage)
+
+    def take_proj_hit(self, proj: 'Bullet'):
+        if self.rect_dist_to_point((proj.x_, proj.y_)) < 10 and (pygame.time.get_ticks() - self.dmg_update_time > self.dmg_cd):
+            self.health.subtract(proj.damage)
+            self.dmg_update_time = pygame.time.get_ticks()
+
+    def is_dead(self) -> bool:
+        """Returns: whether health <= 0"""
+        return self.health.get_hp() <= 0
 
     def update(self, camera_ref=None):
         animation_cooldown = 70
@@ -128,11 +139,13 @@ class Zombie(pygame.sprite.Sprite):
 class Small_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
-        self.speed = 4
+        self.speed = 2
         self.damage = 2
+        self.health = Health(20)
 
 class Big_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 1
-        self.damage = 5
+        self.damage = 10
+        self.health = Health(80)

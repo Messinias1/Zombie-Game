@@ -25,8 +25,6 @@ class Character(pygame.sprite.Sprite):
             self.animation_list[i] = pygame.image.load(self.animation_list[i]).convert_alpha()
         self.frame_index = 0
         self.update_time = pygame.time.get_ticks()
-        self.dmg_update_time = self.update_time
-        self.dmg_cd = 1000  # time to wait between taking damage
         self.image = self.animation_list[self.frame_index]
         self.rect = self.image.get_rect()
         self.dir = "left"
@@ -34,8 +32,7 @@ class Character(pygame.sprite.Sprite):
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
         self.coins = Currency()
-        self.health = Health()  # 200 starting health
-
+        self.health = Health(200)  # 200 starting health
 
     def draw(self, surface):
         pygame.draw.rect(surface, constants.RED, self.rect)
@@ -68,17 +65,6 @@ class Character(pygame.sprite.Sprite):
         dx, dy = self.rect.x - other.rect.x, self.rect.y - other.rect.y + 10
         dist = int(math.hypot(dx, dy))
         return dist == 0
-
-    def take_hit(self, damage: int) -> int:
-        """First, checks if player can take damage based on hit_cooldown, if true then take damage
-        :param damage amount of health to lose if damage can be taken
-        :returns how much damage was taken"""
-        if pygame.time.get_ticks() - self.dmg_update_time > self.dmg_cd:
-            self.dmg_update_time = pygame.time.get_ticks()
-            self.health.health -= damage
-            return damage
-        else:
-            return 0
 
     def check_for_collisions(self, try_x=None, try_y=None) -> (int, int):
         if try_x is None:
