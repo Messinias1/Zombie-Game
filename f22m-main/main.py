@@ -175,10 +175,11 @@ while run:
         dead_enemy_list = []
 
     for zombie in zombie_sprites:
-        if zombie.current_health <= 0:
+        if zombie.health.health <= 0:
             zombie.alive = False
         if zombie.alive == False:
             dead_enemy_list.append(zombie)
+            
             zombie.kill()
 
     if pygame.time.get_ticks() - start_time > constants.ZOMBIE_ATTACK_CD:
@@ -192,17 +193,10 @@ while run:
     for zombie in zombie_list:
         zombie.update()
 
-    dead_zombies = []
     for bullet in bullet_list:
         bullet.update_position(screen)
-        for z in zombie_list:
+        for z in zombie_sprites:
             z.take_proj_hit(bullet)
-            if z.is_dead():
-                dead_zombies.append(z)
-
-    for z in dead_zombies:
-        zombie_list.remove(z)
-        world_room.room_sprite_group.remove(z)
 
     pistol.update(screen)
 
@@ -217,9 +211,6 @@ while run:
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
     screen.blit(wave_txt, wave_txt_rect)
-    
-    if player.is_touching(zombie):
-        player.take_hit(zombie.attack)
 
     if player.health.health <= 0:
         run == False
