@@ -140,6 +140,12 @@ wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
 wave_txt_rect = wave_txt.get_rect()
 wave_txt_rect.center = (600-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
 
+# Zombies remaining txt
+rem_enemies_font = pygame.font.SysFont('inkfree', 30, italic=False, bold=True)
+rem_enemies_txt = coin_font.render('Zombies: ' + str(len(zombie_list)), True, (255, 255, 255))
+rem_enemies_txt_rect = wave_txt.get_rect()
+rem_enemies_txt_rect.center = (400 - (coin_txt.get_rect().width), 0 + (coin_txt.get_rect().height))
+
 while run:
     # Background Color
     clock.tick(constants.FPS)
@@ -207,13 +213,15 @@ while run:
     coin_txt = coin_font.render('Coins: ' + str(player.coins.coins), True, (255, 255, 255))
     health_txt = health_font.render('Health: ' + str(player.health.health), True, (255, 255, 255))
     wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
+    rem_enemies_txt = rem_enemies_font.render('Zombies: ' + str(len(zombie_sprites)), True, (255, 255, 255))
 
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
     screen.blit(wave_txt, wave_txt_rect)
+    screen.blit(rem_enemies_txt, rem_enemies_txt_rect)
 
     if player.health.health <= 0:
-        run == False
+        run = False
 
     pygame.display.update()
 
