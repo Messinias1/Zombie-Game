@@ -127,11 +127,11 @@ class Zombie(pygame.sprite.Sprite):
 class Small_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
-        self.speed = 2
+        self.speed = 3
         self.damage = 2
 
 class Big_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 1
-        self.damage = 5
+        self.damage = 10
