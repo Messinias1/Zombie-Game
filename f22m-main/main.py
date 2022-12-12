@@ -196,6 +196,7 @@ while run:
                 dead_zombies.append(z)
 
     for z in dead_zombies:
+        z.kill()
         try:
             dead_enemy_list.append(z)
             zombie_list.remove(z)
