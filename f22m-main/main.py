@@ -174,6 +174,5 @@ while run:
     screen.blit(health_txt, health_txt_rect)
 
     pygame.display.update()
-    if player.is_touching(zombie):
-        player.take_hit(zombie.attack)
+
 pygame.quit()
