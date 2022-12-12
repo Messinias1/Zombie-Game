@@ -154,8 +154,17 @@ while run:
     for zombie in zombie_list:
         zombie.update()
 
+    dead_zombies = []
     for bullet in bullet_list:
         bullet.update_position(screen)
+        for z in zombie_list:
+            z.take_proj_hit(bullet)
+            if z.is_dead():
+                dead_zombies.append(z)
+
+    for z in dead_zombies:
+        zombie_list.remove(z)
+        world_room.room_sprite_group.remove(z)
 
     pistol.update(screen)
 

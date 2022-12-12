@@ -5,7 +5,7 @@ class Bullet:
     """This creats a new Bullet on screen
     """
     
-    def __init__(self, x:int, y:int , mouse_x:int, mouse_y:int) -> None:
+    def __init__(self, x:int, y:int , mouse_x:int, mouse_y:int, dmg:int=20) -> None:
         """This creates a new Rational Object
 
             Parameters:
@@ -23,6 +23,7 @@ class Bullet:
         self.speed_ = 15
         self.x_velocity_ = math.cos(self.angle_) * self.speed_
         self.y_velocity_ = math.sin(self.angle_) * self.speed_
+        self.damage = dmg  # how much damage to deal onhit
 
     def get_position(self) -> tuple:
         """This Returns the position of the bullet
