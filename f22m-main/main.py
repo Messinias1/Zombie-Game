@@ -1,5 +1,6 @@
 import pygame
 import constants
+
 import math
 import time
 import random
@@ -9,11 +10,11 @@ from character import Character
 from zombie import Zombie
 from zombie import Small_Zombie
 from zombie import Big_Zombie
-from pathfinding import PathfindingWorld
 from world import World
 from button import Button
 from bullet import Bullet
 from weapon import Weapon
+
 
 def handle_input(player):
     for event in pygame.event.get():
@@ -56,25 +57,23 @@ def create_zombie(zombie_list,zombie_sprites):
         new_zombie = Big_Zombie(random.randint(33, constants.SCREEN_WIDTH - 33), random.randint(33, constants.SCREEN_HEIGHT - 33), "assets/images/characters/tiny_zombie", world_room)
     zombie_list.append(new_zombie)
     zombie_sprites.add(new_zombie)
-    
 
 # Initialize Pygame and create display screen
 pygame.init()
 clock = pygame.time.Clock()
 #initialized time for attack timer
-start_timer_time = time.time()
-start_spawn_time = time.time()
+start_time = pygame.time.get_ticks()
 
 screen = pygame.display.set_mode((constants.SCREEN_WIDTH, constants.SCREEN_HEIGHT))
 pygame.display.set_caption("Zombie Game")
 
 # create the world
-world_room = PathfindingWorld("assets/rooms/layout1.json").init_room()
+world_room = World("assets/rooms/layout2.json").init_room()
 # create player
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 
 #create pistol
-pistol  = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
+pistol = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
 
 
 # create quit button
@@ -85,10 +84,12 @@ quit_button = Button(some_width = 75,
                      some_text = 'Quit',
                      some_text_position_x = 27)
 
+
 # quit button function
 def quit_game():
     pygame.quit()
     exit()
+
 
 # Create Items:
 item_list = [ Item(400, 200, "assets/images/items/coin_f0.png", 1, "Coin", world_room, player), 
@@ -150,8 +151,6 @@ while run:
     for item in hit_list:
         item.picked_up = True
 
-    item_sprites.draw(screen)
-    zombie_sprites.draw(screen)
     world_room.room_sprite_group.draw(screen)
 
     # create quit button
@@ -182,11 +181,10 @@ while run:
             dead_enemy_list.append(zombie)
             zombie.kill()
 
-    #timer for attack patterns
-    if time.time() - start_timer_time > 1:
+    if pygame.time.get_ticks() - start_time > constants.ZOMBIE_ATTACK_CD:
         for zombie in zombie_sprites:
             zombie.deal_damage(player)
-        start_timer_time = time.time()
+        start_time = pygame.time.get_ticks()
 
     for item in item_list:
         item.update()
@@ -194,11 +192,19 @@ while run:
     for zombie in zombie_list:
         zombie.update()
 
+    dead_zombies = []
     for bullet in bullet_list:
         bullet.update_position(screen)
+        for z in zombie_list:
+            z.take_proj_hit(bullet)
+            if z.is_dead():
+                dead_zombies.append(z)
+
+    for z in dead_zombies:
+        zombie_list.remove(z)
+        world_room.room_sprite_group.remove(z)
 
     pistol.update(screen)
-
 
     world_room.camera.follow_character(player)
 
@@ -211,7 +217,7 @@ while run:
     screen.blit(coin_txt, coin_txt_rect)
     screen.blit(health_txt, health_txt_rect)
     screen.blit(wave_txt, wave_txt_rect)
-
+    
     if player.is_touching(zombie):
         player.take_hit(zombie.attack)
 
@@ -219,4 +225,5 @@ while run:
         run == False
 
     pygame.display.update()
+
 pygame.quit()
