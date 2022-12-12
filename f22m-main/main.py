@@ -73,7 +73,7 @@ world_room = World("assets/rooms/layout2.json").init_room()
 player = Character(150, 80, "assets/images/characters/elf", world_room)
 
 #create pistol
-pistol = Weapon(0, 0, "assets/images/weapons/pistol.png", world_room, player, "")
+pistol = Weapon(0, 10, "assets/images/weapons/pistol.png", world_room, player, "")
 
 
 # create quit button
@@ -139,6 +139,7 @@ wave_font = pygame.font.SysFont('inkfree', 30, italic=False,bold=True)
 wave_txt = coin_font.render('Wave: ' + str(wave), True, (255, 255, 255))
 wave_txt_rect = wave_txt.get_rect()
 wave_txt_rect.center = (600-(coin_txt.get_rect().width), 0+(coin_txt.get_rect().height))
+
 
 while run:
     # Background Color
@@ -213,7 +214,7 @@ while run:
     screen.blit(wave_txt, wave_txt_rect)
 
     if player.health.health <= 0:
-        run == False
+        run = False
 
     pygame.display.update()
 
