@@ -25,7 +25,11 @@ class Zombie(pygame.sprite.Sprite):
         self.world = in_room
         self.xpos, self.ypos = x, y
         self.rect.center = (x, y)
+        self.speed = 2
+        self.init_health = 10
+        self.current_health = 10
         self.speed = 1.5
+
         self.damage = 5
         self.health = Health(40)
         self.alive = True
@@ -141,11 +145,16 @@ class Small_Zombie(Zombie):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 2
         self.damage = 2
+        self.init_health = 5
+        self.current_health = 5
         self.health = Health(20)
+
 
 class Big_Zombie(Zombie):
     def __init__(self, x, y, imgpath, in_room):
         super().__init__(x, y, imgpath, in_room)
         self.speed = 1
-        self.damage = 10
+        self.damage = 5
+        self.init_health = 20
+        self.current_health = 20
         self.health = Health(80)
