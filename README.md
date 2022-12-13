@@ -2,50 +2,72 @@
 Top-down waved based zombie shooter
 
 
-## Set-up, Running in IDE
-Download Python https://www.python.org/downloads/
-
-Install pygame https://www.pygame.org/wiki/GettingStarted
-
-**Windows**
-
-run command **py -m pip install -U pygame --user**
-
-If using python 3.11 or newer
-
-run command **py -m pip install -U pygame  --pre --user**
-
-**VScode**
-
-install python extension and choose 3.11 interpreter at the bottom right
+## Set-up
 
 
-## using the repository
+**Download Python** 
 
-1. Everyone on the team must clone this project repository to their computers
-3. Remember to always create and check out a branch before changing files
-2. Create issues here in GitHub! Lots of issues! Anything you do for the project could be an issue...
-    * Create an issue because you need to decide what the software is going to be.
-    * Create an issue because you need to learn how to use the programming language/framework.
-    * Create an issue because you need to write the Software Requirements Specification
-    * And, of course, create issues because you want to add features or fix bugs.
-3. Every issue is a discussion. Participate!
-4. Refer to the issues in which you've participated in your stand-up quiz so we know what you've been doing for the project even if it isn't code merged into master.
-5. A Project lets you organize issues on a progress board to see what's on hold, being worked on, done. You can have multiple Project boards within a repository. Maybe create one for documentation, or artwork if your project needs that.
+https://www.python.org/downloads/
 
-## Files to change in this template repo
-Probably all of them!
 
-**.gitignore**: I created this at https://gitignore.io/ with the settings macos,windows,linux,jetbrains,eclipse,visualstudiocode,java,c++,python. You might need more. You might want less.
+**Install PyGame**
 
-**LICENSE**: This is the Creative Commons 0 (public domain) license which may not be compatible with third-party code you might include in your project. Probably isn't. So figure out what's appropriate and change it.
+https://www.pygame.org/wiki/GettingStarted
 
-**README.md** That's this file. Once everyone is set up, replace it with a description of your project. Once your project runs, include instructions for installing and running it!
+PyGame works with most versions of python. A good choice for a Python version to use would be 3.10.9
 
-##Reviewing Code
+To install it, run command 
 
-One person should do the setup, starting with ``git checkout -b initial_setup`` in this repository, then do the setup, get it working, commit the changes, and push them. Create a pull request (PR) and request a review.
+>python -m pip install pygame
 
-The reviewer should then do a ``git fetch`` to update their repo relative to the origin, then the review can  check it out (``git checkout initial_setup``). If it works for the reviewer, too, then the PR can be approved. If not, say what happened in the PR discussion and figure out how to fix it. Once it works for at least one other person, it probably makes sense to merge it into master.
+If using python 3.11 or newer some people were having issues installing PyGame, so you need to use the --pre flag to get the prerelease PyGame version.
 
-If you can't use an existing folder, this might work: run the tool, initialize git in that project folder, create/checkout the initial_setup branch and commit all the changes to it. Set up the remote origin and fetch. Rebase the initial_setup branch onto the master. Then push, PR, review and merge as with the easier setup. I haven't done this recently which is why I offered to help.
+For these python versions use this command 
+
+>python -m pip install pygame  --pre
+
+****
+
+## Running the game
+
+You can run the game through command line
+
+First, clone this repository and 'cd' into the folder where you cloned it, then run these commands:
+
+> cd f22m-main
+
+> python main.py
+
+****
+
+## Playing the game
+
+Use WASD to move, and click to shoot anywhere on screen.
+
+****
+
+# Team M: Our Process
+
+Throughout this project's development we've set teamwork and communication as our main goal. Here we'll mention the things that worked best for us.
+
+**GitHub**
+
+In GitHub, each group member created their own branch where they would develop the code for their chosen class. We would also create new branches when needed.
+
+We utilized Issues and the GitHub Project features to help plan features and keep track of everything in our game. 
+
+At the start of our project, we came up with the idea that someone should initially make a "groundwork" for our game that included a basic map with the player able to move around it, so that everyone in the group would be able to base their code around the same thing. 
+
+After we had brainstormed a few main ideas of how we wanted our game to look and feel, we collaboratively implemented a basic map, a scrolling mechanic, and a moveable player sprite.
+
+Through this idea, even though each team member chose a class idea that was completely different from each other's, we could all know whether or not our code was working by simply testing it against the code in the main branch.
+
+Having a pull requests system where other group members needed to approve changes in code was very beneficial for us as it allowed everyone to stay on track and let team member tell others what was working and what wasn't in their code before merging.
+
+**Microsoft Teams**
+
+We kept all non-code documents for our project on our Teams page (SRS pages, Design Document, etc).
+
+**Discord**
+
+Because we weren't all familiar with Teams, we also coordinated through Discord
