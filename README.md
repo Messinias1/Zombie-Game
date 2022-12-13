@@ -7,17 +7,21 @@ Download Python https://www.python.org/downloads/
 
 Install pygame https://www.pygame.org/wiki/GettingStarted
 
-**Windows**
+**Install PyGame**
 
-run command **py -m pip install -U pygame --user**
+PyGame works with most versions of python. A good choice for a Python version to use would be 3.10.9
 
-If using python 3.11 or newer
+To install it, run command 
 
-run command **py -m pip install -U pygame  --pre --user**
+>python -m pip install pygame
 
-**VScode**
+If using python 3.11 or newer some people were having issues installing PyGame, so you need to use the --pre flag to get the prerelease PyGame version.
 
-install python extension and choose 3.11 interpreter at the bottom right
+For these python versions use this command 
+
+>python -m pip install pygame  --pre
+
+
 
 
 ## using the repository
