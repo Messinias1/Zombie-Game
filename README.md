@@ -60,7 +60,7 @@ At the start of our project, we came up with the idea that someone should initia
 
 After we had brainstormed a few main ideas of how we wanted our game to look and feel, we collaboratively implemented a basic map, a scrolling mechanic, and a moveable player sprite.
 
-Through this idea, even though each team member chose a class idea that was completely different from each other's, we could all knew whether or not our code was working by simply testing it against the code in the main branch.
+Through this idea, even though each team member chose a class idea that was completely different from each other's, we could all know whether or not our code was working by simply testing it against the code in the main branch.
 
 Having a pull requests system where other group members needed to approve changes in code was very beneficial for us as it allowed everyone to stay on track and let team member tell others what was working and what wasn't in their code before merging.
 
